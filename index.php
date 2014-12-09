@@ -2,7 +2,8 @@
 // Declare the interface 'iTemplate'
 abstract class MVCFactory
 {
-	private $DAO_Fact;
+	private $DAO_Factory;
+	protected $type;
 
 	public function __construct(){
 		$this->DAO_Factory = new DAO_Factory();
@@ -13,24 +14,44 @@ abstract class MVCFactory
     public function createController($model, $action, $params){
     	return new Controller($model, $action, $params);
     }
-    abstract public function createModel();
+	public function createModel(){
+		$this->DAO_Factory->initDBResources();
+		$DAO = $this->DAO_Factory->getDAO($this->type);
+		return new Model($DAO);
+	}
 }
 
 class DAO_Factory {
+
 	public function initDBResources(){
 		# code...
 	}
-	public function getLecturerDAO()
+
+	public function getDAO($type='')
 	{
-		return new LecturerDAO();
-	}
-	public function getCourseDAO()
-	{
-		return new CourseDAO();
-	}
-	public function getTaskDAO()
-	{
-		return new TaskDAO();
+		switch ($type) {
+			case 'Lecturer':
+				return new LecturerDAO();
+				break;
+			case 'Course':
+				return new CourseDAO();
+				break;
+			case 'Task':
+				return new TaskDAO();
+				break;
+			case 'Student':
+				return new StudentDAO();
+				break;
+			case 'Nationality':
+				return new NationalityDAO();
+				break;
+			case 'Questionnaire':
+				return new QuestionnaireDAO();
+				break;
+			default:
+				echo "derp";
+				break;
+		}
 	}
 }
 
@@ -39,7 +60,7 @@ class DAO_Factory {
 */
 abstract class DAO
 {
-	
+
 	function __construct()
 	{
 	}
@@ -52,7 +73,7 @@ abstract class DAO
 
 class CourseDAO extends DAO
 {
-	
+
 	function __construct()
 	{
 	}
@@ -75,7 +96,7 @@ class CourseDAO extends DAO
 
 class TaskDAO extends DAO
 {
-	
+
 	function __construct()
 	{
 	}
@@ -98,7 +119,7 @@ class TaskDAO extends DAO
 
 class LecturerDAO extends DAO
 {
-	
+
 	function __construct()
 	{
 	}
@@ -122,29 +143,50 @@ class LecturerDAO extends DAO
 
 
 class LecturerMVCFactory extends MVCFactory
-{	
-	public function createModel(){
-		$this->DAO_Factory->initDBResources();
-		$DAO = $this->DAO_Factory->getLecturerDAO();
-		return new Model($DAO);
+{
+	function __construct() {
+		parent::__construct();
+		$this->type = "Lecturer";
 	}
 }
 
 class CourseMVCFactory extends MVCFactory
 {
-	public function createModel(){
-		$this->DAO_Factory->initDBResources();
-		$DAO = $this->DAO_Factory->getCourseDAO();
-		return new Model($DAO);
+	function __construct() {
+		parent::__construct();
+		$this->type = "Course";
+	}
+}
+
+class StudentMVCFactory extends MVCFactory
+{
+	function __construct() {
+		parent::__construct();
+		$this->type = "Student";
+	}
+}
+
+class NationalityMVCFactory extends MVCFactory
+{
+	function __construct() {
+		parent::__construct();
+		$this->type = "Nationality";
+	}
+}
+
+class QuestionnaireMVCFactory extends MVCFactory
+{
+	function __construct() {
+		parent::__construct();
+		$this->type = "Questionnaire";
 	}
 }
 
 class TaskMVCFactory extends MVCFactory
 {
-	public function createModel(){
-		$this->DAO_Factory->initDBResources();
-		$DAO = $this->DAO_Factory->getTaskDAO();
-		return new Model($DAO);
+	function __construct() {
+		parent::__construct();
+		$this->type = "Task";
 	}
 }
 
@@ -169,12 +211,12 @@ class View {
 		$CSV = "";
 		$line = "";
 		if (!is_array($anArray[0])) {
-			
+
 			foreach ($anArray as $key => $value) {
 				$CSV .= $key . ", ";
 				$line .= $value . ", ";
 			}
-			
+
 			return $CSV . "\n" . $line;
 		} else {
 
@@ -183,20 +225,20 @@ class View {
 			}
 			$CSV .= "\n";
 
-			for($i=0; $i < count($anArray); $i++) { 
+			for($i=0; $i < count($anArray); $i++) {
 				foreach ($anArray[i] as $key => $value) {
 					$CSV .= $value. ", ";
 				}
 				$CSV .= "\n";
 			}
-			
+
 			return $CSV;
 		}
-		
+
 	}
 
 	public function toXML($anArray){
-		
+
 		$xml = new SimpleXMLElement('<response/>');
 		array_walk_recursive($anArray, array($xml, 'addChild'));
 		return $xml->asXML();
@@ -235,23 +277,23 @@ class Controller{
 	private $model;
 
 	public function __construct($model, $action, $parameters=NULL) {
-		$this->model = $model; 
-		if ($action !== NULL) { 
+		$this->model = $model;
+		if ($action !== NULL) {
 			switch ($action) {
-				case "get": 
-					$this->model->get($parameters); 
+				case "get":
+					$this->model->get($parameters);
 					break;
-				case "search": 
-					$this->model->search($parameters); 
+				case "search":
+					$this->model->search($parameters);
 					break;
-				case "insert": 
-					$this->model->insert($parameters); 
+				case "insert":
+					$this->model->insert($parameters);
 					break;
-				case "update": 
-					$this->model->update($parameters); 
+				case "update":
+					$this->model->update($parameters);
 					break;
-				case "delete": 
-					$this->model->delete($parameters); 
+				case "delete":
+					$this->model->delete($parameters);
 					break;
 			}
 		}
@@ -265,25 +307,40 @@ Slim\Slim::registerAutoloader();
 
 $app = new Slim\Slim(array('debug' => true));
 
-$app->map('(/:datatype)/api/:table(/:method_id)', function($datatype="json", $table, $method_id=NULL) use ($app) {
-	
+$app->map('/v1/:resource(/:id)(/:related_resource)', function($resource, $id=NULL, $related_resource=NULL) use ($app) {
+
+	$datatype="json";
 	$factory;
-	if ($table === "lecturer") {
-		$factory = new LecturerMVCFactory();
-	} else if ($table === "course") {
-		$factory = new CourseMVCFactory();
-	} else if ($table === "task"){
-		$factory = new TaskMVCFactory();
-	} else {
-		$app->redirect('/error');
-	}
+
+	switch ($resource) {
+		case "lecturers":
+			$factory = new LecturerMVCFactory();
+			break;
+		case "students":
+			$factory = new StudentMVCFactory();
+			break;
+		case "tasks":
+			$factory = new TaskMVCFactory();
+			break;
+		case "nationalities":
+			$factory = new NationalityMVCFactory();
+			break;
+		case "courses":
+			$factory = new CourseMVCFactory();
+			break;
+		case "questionnaires":
+			$factory = new QuestionnaireMVCFactory();
+			break;
+		default:
+			$app->redirect('/error');
+			break;
+		}
 
 	$model = $factory->createModel();
 
-	$method = clean_request($app->request->getMethod(), $method_id);
+	$method = clean_request($app->request->getMethod());
 	$params = $app->request->params();
-
-	$controller = $factory->createController($model, $method_id, $params);
+	$controller = $factory->createController($model, $method, $params);
 	$view = $factory->createView($model);
 
 	header("Content-Type: application/$datatype");
@@ -295,7 +352,7 @@ $app->map('(/:datatype)/api/:table(/:method_id)', function($datatype="json", $ta
 $app->run();
 
 function clean_request($req_type, $method=null){
-	
+
 	$clean_method;
 	switch ($req_type) {
 		case 'GET':
@@ -320,7 +377,7 @@ function clean_request($req_type, $method=null){
 	} else {
 		return $method;
 	}
-	
+
 }
 
 ?>
