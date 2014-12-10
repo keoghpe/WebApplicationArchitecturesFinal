@@ -29,7 +29,7 @@ Slim\Slim::registerAutoloader();
 
 $app = new Slim\Slim(array('debug' => true));
 
-$app->map('/v1/:resource(/:id)(/:related_resource)', function($resource, $id=NULL, $related_resource=NULL) use ($app) {
+$app->map('/v1/:resource(/:id)(/:related_resource/:related_id)', function($resource, $id=NULL, $related_resource=NULL, $related_id=NULL) use ($app) {
 
 	$datatype="json";
 	$factory;

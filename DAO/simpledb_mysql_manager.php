@@ -33,8 +33,10 @@ class DBManager {
     function executeQuery($query) {
         $result;
 
-        if (!empty($this->db_link))
+        if (!empty($this->db_link)){
             $result = mysqli_query($this->db_link, $query) or die ("Cannot execute query");
+        }
+
 
         if (!empty($result) && is_array($result)) {
             $rows = array();
