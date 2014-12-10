@@ -13,9 +13,6 @@ class StudentDAO extends DAO
     public function search($params){
         return "search Student";
     }
-    public function insert($params){
-        return "insert Student";
-    }
     public function update($params){
         return "update Student";
     }

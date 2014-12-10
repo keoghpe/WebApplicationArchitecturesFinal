@@ -12,9 +12,6 @@ class QuestionnaireDAO extends DAO
     public function search($params){
         return "search Questionnaire";
     }
-    public function insert($params){
-        return "insert Questionnaire";
-    }
     public function update($params){
         return "update Questionnaire";
     }

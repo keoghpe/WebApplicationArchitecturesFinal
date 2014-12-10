@@ -1,15 +1,15 @@
 <?php
 
 class Model {
-    private $DAO, $resultsList;
+    protected $DAO, $resultsList, $template;
 
     function __construct($aDAO)
     {
         $this->DAO = $aDAO;
     }
 
-    public function get($params=null){
-        $this->resultsList = $this->DAO->get($params);
+    public function get($id=null,$params=null,$related_resource=null){
+        $this->resultsList = $this->DAO->get($id, $params, $related_resource);
     }
     public function search($params){
         $this->resultsList = $this->DAO->search($params);

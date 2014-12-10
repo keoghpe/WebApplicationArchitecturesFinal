@@ -10,7 +10,6 @@ require_once("DAO/nationalityDAO.php");
 require_once("DAO/questionnaireDAO.php");
 require_once("DAO/studentDAO.php");
 
-require_once("Model.php");
 require_once("View.php");
 require_once("Controller.php");
 
@@ -29,7 +28,7 @@ Slim\Slim::registerAutoloader();
 
 $app = new Slim\Slim(array('debug' => true));
 
-$app->map('/v1/:resource(/:id)(/:related_resource/:related_id)', function($resource, $id=NULL, $related_resource=NULL, $related_id=NULL) use ($app) {
+$app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NULL, $related_resource=NULL) use ($app) {
 
 	$datatype="json";
 	$factory;
@@ -62,7 +61,7 @@ $app->map('/v1/:resource(/:id)(/:related_resource/:related_id)', function($resou
 
 	$method = clean_request($app->request->getMethod());
 	$params = $app->request->params();
-	$controller = $factory->createController($model, $method, $params);
+	$controller = $factory->createController($model, $method, $id, $params, $related_resource);
 	$view = $factory->createView($model);
 
 	header("Content-Type: application/$datatype");

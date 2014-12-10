@@ -9,9 +9,6 @@ class NationalityDAO extends DAO
     public function search($params){
         return "search Nationality";
     }
-    public function insert($params){
-        return "insert Nationality";
-    }
     public function update($params){
         return "update Nationality";
     }

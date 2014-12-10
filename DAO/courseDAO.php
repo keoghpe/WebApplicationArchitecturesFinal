@@ -11,9 +11,7 @@ class CourseDAO extends DAO
     public function search($params){
         return "search Course";
     }
-    public function insert($params){
-        return "insert Course";
-    }
+
     public function update($params){
         return "update Course";
     }

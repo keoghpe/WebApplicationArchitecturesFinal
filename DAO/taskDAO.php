@@ -12,9 +12,6 @@ class TaskDAO extends DAO
     public function search($params){
         return "search Task";
     }
-    public function insert($params){
-        return "insert Task";
-    }
     public function update($params){
         return "update Task";
     }

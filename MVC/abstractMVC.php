@@ -1,8 +1,10 @@
 <?php
 
+require_once("Models/Model.php");
+
 abstract class MVCFactory
 {
-    private $DAO_Factory;
+    protected $DAO_Factory;
     protected $type;
 
     public function __construct(){
@@ -11,8 +13,8 @@ abstract class MVCFactory
     public function createView($model){
         return new View($model);
     }
-    public function createController($model, $action, $params){
-        return new Controller($model, $action, $params);
+    public function createController($model, $action, $id, $params){
+        return new Controller($model, $action, $id, $params);
     }
     public function createModel(){
         $this->DAO_Factory->initDBResources();

@@ -3,12 +3,13 @@
 class Controller{
     private $model;
 
-    public function __construct($model, $action, $parameters=NULL) {
+    public function __construct($model, $action, $id, $parameters, $related_resource=null) {
+
         $this->model = $model;
         if ($action !== NULL) {
             switch ($action) {
                 case "get":
-                    $this->model->get($parameters);
+                    $this->model->get($id, $parameters, $related_resource);
                     break;
                 case "search":
                     $this->model->search($parameters);

@@ -9,9 +9,6 @@ class LecturerDAO extends DAO
     public function search($params){
         return "search Lecturer";
     }
-    public function insert($params){
-        return "insert Lecturer";
-    }
     public function update($params){
         return "update Lecturer";
     }
