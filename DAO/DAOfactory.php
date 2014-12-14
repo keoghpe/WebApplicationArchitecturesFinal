@@ -1,6 +1,14 @@
 <?php
 
 include_once("simpledb_mysql_manager.php");
+require_once("abstractDAO.php");
+require_once("lecturerDAO.php");
+require_once("taskDAO.php");
+require_once("courseDAO.php");
+require_once("nationalityDAO.php");
+require_once("questionnaireDAO.php");
+require_once("studentDAO.php"); 
+
 
 class DAO_Factory {
 

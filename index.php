@@ -1,14 +1,6 @@
 <?php
-// Declare the interface 'iTemplate'
 
 require_once("DAO/DAOfactory.php");
-require_once("DAO/abstractDAO.php");
-require_once("DAO/lecturerDAO.php");
-require_once("DAO/taskDAO.php");
-require_once("DAO/courseDAO.php");
-require_once("DAO/nationalityDAO.php");
-require_once("DAO/questionnaireDAO.php");
-require_once("DAO/studentDAO.php");
 
 require_once("View.php");
 require_once("Controller.php");

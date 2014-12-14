@@ -1,6 +1,6 @@
 <?php
 
-class Task  Model extends Model {
+class TaskModel extends Model {
 
     protected $template = array(
         "description"=>"empty",

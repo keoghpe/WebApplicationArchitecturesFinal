@@ -81,9 +81,4 @@ class ValidatorTest extends UnitTestCase {
 
     }
 }
-
-// paragraph
-// date
-// integer
-// time interval
 ?>

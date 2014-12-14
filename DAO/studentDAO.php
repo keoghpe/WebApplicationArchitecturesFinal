@@ -9,16 +9,6 @@ class StudentDAO extends DAO
     protected $join_table_name = "nationalities";
     protected $join_table_id = "id";
 
-
-    public function search($params){
-        return "search Student";
-    }
-    public function update($params){
-        return "update Student";
-    }
-    public function delete($params){
-        return "delete Student";
-    }
 }
 
 ?>

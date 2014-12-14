@@ -8,16 +8,6 @@ class CourseDAO extends DAO
     protected $join_table_name = "lecturers";
     protected $join_table_id = "id";
 
-    public function search($params){
-        return "search Course";
-    }
-
-    public function update($params){
-        return "update Course";
-    }
-    public function delete($params){
-        return "delete Course";
-    }
 }
 
 ?>
