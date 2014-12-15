@@ -15,11 +15,21 @@ abstract class Model {
 
     public function get($id=null,$params=null,$related_resource=null){
 
-        $this->resultsList = $this->DAO->get($id, $params, $related_resource);
+        try{
+            $clean_params = $this->validate($params);
+            $this->resultsList = $this->DAO->get($id, $params, $related_resource);
+        } catch(InvalidInputException $e){
+            $this->resultsList = $e->getExceptions();
+        }
     }
     public function search($params){
 
-        $this->resultsList = $this->DAO->search($params);
+        try{
+            $clean_params = $this->validate($params);
+            $this->resultsList = $this->DAO->search($params);
+        } catch(InvalidInputException $e){
+            $this->resultsList = $e->getExceptions();
+        }
     }
     public function insert($params){
         try{
@@ -30,12 +40,21 @@ abstract class Model {
         }
     }
     public function delete($params){
+        try{
+            $clean_params = $this->validate($params);
+            $this->resultsList = $this->DAO->delete($params);
+        } catch(InvalidInputException $e){
+            $this->resultsList = $e->getExceptions();
+        }
 
-        $this->resultsList = $this->DAO->delete($params);
     }
     public function update($params){
-
-        $this->resultsList = $this->DAO->update($params);
+        try{
+            $clean_params = $this->validate($params);
+            $this->resultsList = $this->DAO->update($params);
+        } catch(InvalidInputException $e){
+            $this->resultsList = $e->getExceptions();
+        }
     }
     public function output(){
 
@@ -51,7 +70,7 @@ abstract class Model {
 
             try{
                 if(!array_key_exists($key, $this->types)){
-                    throw new Exception("There is no field $key associated with this table",1);
+                    throw new Exception("Cannot access field $key associated with this table",1);
                 }
                 $this->validator->validate($value, $this->types[$key]);
                 $validatedInputs[$key] = $value;
@@ -62,7 +81,7 @@ abstract class Model {
                 $invalidInputException->addException($e);
             }
         }
-        
+
         if($invalidInputException !== null){
             throw $invalidInputException;
         }

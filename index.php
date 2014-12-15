@@ -15,13 +15,15 @@ $app = new Slim\Slim(array('debug' => true));
 
 $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NULL, $related_resource=NULL) use ($app) {
 
-	$datatype="json";
 	$factory;
-	$resources_array = array("lecturers", "students", "tasks", "nationalities", "courses", "questionnaires");
+	$resources_array = array("lecturers", "students",
+							"tasks", "nationalities",
+							"courses", "questionnaires");
 
 	if(in_array($resource, $resources_array)){
 
-		// Format the type to be unpluralised so the factory can get the correct model
+		// Format the type to be unpluralised so
+		// the factory can get the correct model
 		// e.g. convert lecturers to Lecturer
 		$factory = new MVCFactory(substr(ucfirst($resource),0,-1));
 	} else{
@@ -29,10 +31,22 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NU
 	}
 
 	$model = $factory->createModel();
+	$view = $factory->createView($model);
+
+	// Check if the request contains a valid datatype field
+
+	if(array_key_exists("datatype",$params)
+			&& in_array(strtolower($params["datatype"]), $view->getAvailableDatatypes())){
+		$datatype = strtolower($params["datatype"]);
+		unset($params["datatype"]);
+	} else{
+		$datatype="json";
+	}
+
 	$method = clean_request($app->request->getMethod());
 	$params = $app->request->params();
+
 	$controller = $factory->createController($model, $method, $id, $params, $related_resource);
-	$view = $factory->createView($model);
 
 	header("Content-Type: application/$datatype");
 	echo $view->output("$datatype");
