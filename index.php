@@ -5,14 +5,7 @@ require_once("DAO/DAOfactory.php");
 require_once("View.php");
 require_once("Controller.php");
 
-require_once("MVC/abstractMVC.php");
-require_once("MVC/courseMVC.php");
-require_once("MVC/lecturerMVC.php");
-require_once("MVC/nationalityMVC.php");
-require_once("MVC/questionnaireMVC.php");
-require_once("MVC/studentMVC.php");
-require_once("MVC/taskMVC.php");
-
+require_once("MVC/MVC.php");
 
 require_once 'Slim/Slim.php';
 
@@ -24,30 +17,16 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NU
 
 	$datatype="json";
 	$factory;
+	$resources_array = array("lecturers", "students", "tasks", "nationalities", "courses", "questionnaires");
 
-	switch ($resource) {
-		case "lecturers":
-			$factory = new LecturerMVCFactory();
-			break;
-		case "students":
-			$factory = new StudentMVCFactory();
-			break;
-		case "tasks":
-			$factory = new TaskMVCFactory();
-			break;
-		case "nationalities":
-			$factory = new NationalityMVCFactory();
-			break;
-		case "courses":
-			$factory = new CourseMVCFactory();
-			break;
-		case "questionnaires":
-			$factory = new QuestionnaireMVCFactory();
-			break;
-		default:
-			$app->redirect('/error');
-			break;
-		}
+	if(in_array($resource, $resources_array)){
+
+		// Format the type to be unpluralised so the factory can get the correct model
+		// e.g. convert lecturers to Lecturer
+		$factory = new MVCFactory(substr(ucfirst($resource),0,-1));
+	} else{
+		$app->redirect('/error');
+	}
 
 	$model = $factory->createModel();
 
@@ -61,6 +40,11 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NU
 	exit;
 
 })->via('GET', 'POST', 'PUT', 'DELETE');
+
+$app->get("/", function(){
+	header("Location: ". HOMEPAGE_LOCATION);
+	die();
+});
 
 $app->run();
 
