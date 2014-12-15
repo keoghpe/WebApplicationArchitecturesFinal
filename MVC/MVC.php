@@ -18,8 +18,8 @@ class MVCFactory
         $this->type = $type;
     }
 
-    public function createView($model){
-        return new View($model);
+    public function createView($model, $resource){
+        return new View($model, $resource);
     }
 
     public function createController($model, $action, $id, $params){

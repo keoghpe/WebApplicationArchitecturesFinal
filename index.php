@@ -4,16 +4,16 @@ require_once("DAO/DAOfactory.php");
 
 require_once("View.php");
 require_once("Controller.php");
-
 require_once("MVC/MVC.php");
 
-require_once 'Slim/Slim.php';
+require_once("Slim/Slim.php");
 
 Slim\Slim::registerAutoloader();
 
 $app = new Slim\Slim(array('debug' => true));
 
-$app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NULL, $related_resource=NULL) use ($app) {
+$app->map('/v1/:resource(/:id)(/:related_resource/)',
+	function($resource, $id=NULL, $related_resource=NULL) use ($app) {
 
 	$factory;
 	$resources_array = array("lecturers", "students",
@@ -25,15 +25,20 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NU
 		// Format the type to be unpluralised so
 		// the factory can get the correct model
 		// e.g. convert lecturers to Lecturer
-		$factory = new MVCFactory(substr(ucfirst($resource),0,-1));
+		$resource = substr(ucfirst($resource),0,-1);
+		$factory = new MVCFactory($resource);
+
+
 	} else{
 		$app->redirect('/error');
 	}
 
 	$model = $factory->createModel();
-	$view = $factory->createView($model);
+	$view = $factory->createView($model, $resource);
 
 	// Check if the request contains a valid datatype field
+
+	$params = $app->request->params();
 
 	if(array_key_exists("datatype",$params)
 			&& in_array(strtolower($params["datatype"]), $view->getAvailableDatatypes())){
@@ -44,7 +49,6 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NU
 	}
 
 	$method = clean_request($app->request->getMethod());
-	$params = $app->request->params();
 
 	$controller = $factory->createController($model, $method, $id, $params, $related_resource);
 

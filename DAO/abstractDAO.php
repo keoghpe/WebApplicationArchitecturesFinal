@@ -32,7 +32,7 @@ abstract class DAO
     }
 
 
-    public function get($id=null, $params=null, $related=null){
+    public function get($id=null, $params=null, $conditions=null, $related=null){
 
         $sqlQuery = "SELECT * ";
         $sqlQuery .= "FROM $this->table_name ";
@@ -48,9 +48,21 @@ abstract class DAO
             $sqlQuery .= " WHERE  $this->table_name.$this->table_id = '$id' ";
         }
 
-        $sqlQuery .= "ORDER BY $this->table_name.$this->table_id";
+        $sqlQuery .= "ORDER BY $this->table_name.$this->table_id ";
+
+        if(array_key_exists("limit", $conditions)){
+            $limit = $conditions["limit"];
+            $sqlQuery .= "LIMIT $limit ";
+        }
+
+        if(array_key_exists("offset", $conditions)){
+            $limit = $conditions["offset"];
+            $sqlQuery .= "OFFSET $limit ";
+        }
+
         $sqlQuery .="; ";
 
+        //echo $sqlQuery;
         $result = $this->getDbManager()->executeSelectQuery($sqlQuery);
 
         return $result;

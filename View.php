@@ -2,8 +2,9 @@
 
 class View {
 
-    private $model;
-    function __construct($model){
+    private $model, $resource;
+    function __construct($model, $resource){
+        $this->resource = $resource;
         $this->model = $model;
     }
 
@@ -57,9 +58,30 @@ class View {
 
     public function toXML($anArray){
 
-        $xml = new SimpleXMLElement('<response/>');
-        array_walk_recursive($anArray, array($xml, 'addChild'));
-        return $xml->asXML();
+        $response = new SimpleXMLElement("<?xml version=\"1.0\"?><response></response>");
+
+        $this->array_to_xml($anArray,$response);
+
+        return $response->asXML();
+    }
+
+    private function array_to_xml($anArray, &$response) {
+        
+        foreach($anArray as $key => $value) {
+            if(is_array($value)) {
+                if(!is_numeric($key)){
+                    $subnode = $response->addChild("$key");
+                    $this->array_to_xml($value, $subnode);
+                }
+                else{
+                    $subnode = $response->addChild("$this->resource$key");
+                    $this->array_to_xml($value, $subnode);
+                }
+            }
+            else {
+                $response->addChild("$key",htmlspecialchars("$value"));
+            }
+        }
     }
 }
 
