@@ -5,21 +5,20 @@ require_once("InvalidInputException.php");
 
 abstract class Model {
 
-    protected $DAO, $resultsList, $template, $validator;
+    protected $DAO, $resultsList, $template, $validator, $conditions_types;
 
     function __construct($aDAO)
     {
         $this->DAO = $aDAO;
         $this->validator = new Validator();
+        $this->conditions_types = array("limit" => "integer", "offset" => "integer");
     }
 
     public function get($params_array){
 
-        $conditions_types = array("limit" => "integer", "offset" => "integer");
-
         try{
             if($params_array["conditions"] !== null)
-                $params_array["conditions"] = $this->validate($params_array["conditions"], $conditions_types);
+                $params_array["conditions"] = $this->validate($params_array["conditions"], $this->conditions_types);
 
             if($params_array["params"] !== null)
                 $params_array["params"] = $this->validate($params_array["params"], $this->types);
@@ -29,45 +28,57 @@ abstract class Model {
             $this->resultsList = $e->getExceptions();
         }
     }
+
+
     public function search($params_array){
 
         try{
             if($params_array["conditions"] !== null)
-                $params_array["conditions"] = $this->validate($params_array["conditions"], $conditions_types);
+                $params_array["conditions"] = $this->validate($params_array["conditions"], $this->conditions_types);
 
             if($params_array["params"] !== null)
                 $params_array["params"] = $this->validate($params_array["params"], $this->types);
 
-            $this->resultsList = $this->DAO->search($params_array["query"],$this->template);
+            $this->resultsList = $this->DAO->search($params_array, $this->template);
         } catch(InvalidInputException $e){
             $this->resultsList = $e->getExceptions();
         }
     }
-    public function insert($params){
+
+
+    public function insert($params_array){
         try{
-            $params = $this->validate($params, $this->types);
-            $this->resultsList = $this->DAO->insert($params);
+            $params_array["params"] = $this->validate($params_array["params"], $this->types);
+            $this->resultsList = $this->DAO->insert($params_array);
         } catch(InvalidInputException $e){
             $this->resultsList = $e->getExceptions();
         }
     }
-    public function delete($params){
+
+
+    public function delete($params_array){
         try{
-            $params = $this->validate($params, $this->types);
+            $params = $this->validate($params_array["params"], $this->types);
             $this->resultsList = $this->DAO->delete($params);
         } catch(InvalidInputException $e){
             $this->resultsList = $e->getExceptions();
         }
 
     }
-    public function update($params){
+
+
+    public function update($params_array){
         try{
-            $params = $this->validate($params, $this->types);
-            $this->resultsList = $this->DAO->update($params);
+            echo var_dump($params_array);
+            
+            $params_array["params"] = $this->validate($params_array["params"], $this->types);
+            $this->resultsList = $this->DAO->update($params_array);
         } catch(InvalidInputException $e){
             $this->resultsList = $e->getExceptions();
         }
     }
+
+
     public function output(){
 
         return $this->resultsList;

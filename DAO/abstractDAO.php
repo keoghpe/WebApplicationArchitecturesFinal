@@ -37,12 +37,12 @@ abstract class DAO
         $sqlQuery = "SELECT * ";
         $sqlQuery .= "FROM $this->table_name ";
 
-        if(property_exists($this, "join_table_name")){
-            $sqlQuery .= "INNER JOIN $this->join_table_name ";
-            $sqlQuery .= "ON $this->table_name.$this->foreign_key";
-            $sqlQuery .= "=";
-            $sqlQuery .= "$this->join_table_name.$this->join_table_id ";
-        }
+        // if(property_exists($this, "join_table_name")){
+        //     $sqlQuery .= "INNER JOIN $this->join_table_name ";
+        //     $sqlQuery .= "ON $this->table_name.$this->foreign_key";
+        //     $sqlQuery .= "=";
+        //     $sqlQuery .= "$this->join_table_name.$this->join_table_id ";
+        // }
 
         if ($params_array["id"] !== null) {
             $id=$params_array["id"];
@@ -51,15 +51,7 @@ abstract class DAO
 
         $sqlQuery .= "ORDER BY $this->table_name.$this->table_id ";
 
-        if($params_array["conditions"] !== null && array_key_exists("limit", $params_array["conditions"])){
-            $limit = $params_array["conditions"]["limit"];
-            $sqlQuery .= "LIMIT $limit ";
-        }
-
-        if($params_array["conditions"] !== null && array_key_exists("offset", $params_array["conditions"])){
-            $limit = $params_array["conditions"]["offset"];
-            $sqlQuery .= "OFFSET $limit ";
-        }
+        $this->filter($sqlQuery, $params_array);
 
         $sqlQuery .="; ";
 
@@ -70,7 +62,35 @@ abstract class DAO
 
     }
 
-    public function insert($params){
+    public function search($params_array,$model){
+        $query = $params_array["query"];
+        $sqlQuery = "SELECT * ";
+        $sqlQuery .= "FROM $this->table_name ";
+        $sqlQuery .= "WHERE ";
+
+        $search_string = "";
+        foreach($model as $key => $value){
+            $search_string .= "$this->table_name.$key LIKE '%$query%' OR ";
+        }
+
+        $sqlQuery .= substr($search_string, 0, -3);
+
+
+        $sqlQuery .= "ORDER BY $this->table_name.$this->table_id ";
+
+        $this->filter($sqlQuery, $params_array);
+
+        $sqlQuery .= ";";
+
+        echo $sqlQuery;
+        $result = $this->getDbManager()->executeSelectQuery($sqlQuery);
+
+        return $result;
+    }
+
+    public function insert($params_array){
+
+        $params = $params_array["params"];
 
         $keys = "(";
         $values = "(";
@@ -89,6 +109,8 @@ abstract class DAO
         $sqlQuery = "INSERT INTO ". $this->table_name ." " .$keys." ";
         $sqlQuery .= "VALUES " . $values .";";
 
+        echo $sqlQuery;
+
         $result = $this->getDbManager()->executeQuery($sqlQuery);
 
         if($result === null){
@@ -99,40 +121,37 @@ abstract class DAO
 
     }
 
-    public function search($query,$model){
-        $sqlQuery = "SELECT * ";
-        $sqlQuery .= "FROM $this->table_name ";
-        $sqlQuery .= "WHERE ";
+    public function update($params_array){
 
-        $search_string = "";
-        foreach($model as $key => $value){
-            $search_string .= "$this->table_name.$key LIKE '%$query%' OR ";
-        }
+        $params = $params_array["params"];
 
-        $sqlQuery .= substr($search_string, 0, -3);
-        $sqlQuery .= "ORDER BY $this->table_name.$this->table_id; ";
-
-        $result = $this->getDbManager()->executeSelectQuery($sqlQuery);
-
-        return $result;
-    }
-
-    public function update($id, $params){
-        $sqlQuery = "UPDATE $table_name";
+        
+        $sqlQuery = "UPDATE $this->table_name";
         $sqlQuery .= " SET ";
 
         $set_string = "";
 
         foreach($params as $key => $value) {
-            $set_string .= "$table_name.$key = '$value', ";
+            $set_string .= "$this->table_name";
+            $set_string .= ".$key ";
+            $set_string .= "= '$value', ";
         }
 
         $set_string = substr($set_string, 0, -2);
 
         $sqlQuery .= $set_string;
-        $sqlQuery .= " WHERE $table_name.$table_id = $id";
+
+        if($params_array["id"] !== null){
+            $id = $params_array["id"];
+            $sqlQuery .= " WHERE $this->table_name.$this->table_id = $id";
+        }
+
+        $sqlQuery .= ";";
+
+        echo $sqlQuery;
 
         $result = $this->getDbManager()->executeQuery($sqlQuery);
+
 
         return $result;
     }
@@ -145,6 +164,19 @@ abstract class DAO
         $result = $this->getDbManager()->executeQuery($sqlQuery);
 
         return $result;
+    }
+
+    private function filter(&$sqlQuery, $params_array){
+
+        if($params_array["conditions"] !== null && array_key_exists("limit", $params_array["conditions"])){
+            $limit = $params_array["conditions"]["limit"];
+            $sqlQuery .= "LIMIT $limit ";
+        }
+
+        if($params_array["conditions"] !== null && array_key_exists("offset", $params_array["conditions"])){
+            $limit = $params_array["conditions"]["offset"];
+            $sqlQuery .= "OFFSET $limit ";
+        }
     }
 }
 
