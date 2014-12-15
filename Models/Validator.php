@@ -21,7 +21,7 @@ class Validator
             if (preg_match($this->validation_regs[$type], $input)){
                 return true;
             } else {
-                throw new Exception("Error: is not $input a valid $type", 1);
+                throw new Exception("Error: $input is not a valid $type", 1);
             }
 
         } else {

@@ -10,8 +10,8 @@ class StudentModel extends Model {
 
     protected $types = array(
         "student_number"=>"hex",
-        "description"=>"alphanumeric",
-        "lecturer_id"=>"integer"
+        "age"=>"integer",
+        "id_nationality"=>"integer"
     );
 }
 
