@@ -53,7 +53,7 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 		$action = clean_request($app->request->getMethod(), $actions_params);
 
 	} catch(Exception $e){
-		//$app->redirect('/error');
+		$app->redirect('/error');
 	}
 
 
