@@ -22,8 +22,8 @@ class MVCFactory
         return new View($model, $resource);
     }
 
-    public function createController($model, $action, $id, $params){
-        return new Controller($model, $action, $id, $params);
+    public function createController($model, $action, $params){
+        return new Controller($model, $action, $params);
     }
 
     public function createModel(){

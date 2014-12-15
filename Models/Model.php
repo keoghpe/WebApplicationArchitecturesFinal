@@ -13,33 +13,32 @@ abstract class Model {
         $this->validator = new Validator();
     }
 
-    public function get($id=null,$params=null,$related_resource=null){
+    public function get($params_array){
 
-        $conditions = array();
         $conditions_types = array("limit" => "integer", "offset" => "integer");
-        if(array_key_exists("limit", $params)){
-            $conditions["limit"] = $params["limit"];
-            unset($params["limit"]);
-        }
-
-        if(array_key_exists("offset", $params)){
-            $conditions["offset"] = $params["offset"];
-            unset($params["offset"]);
-        }
 
         try{
-            $conditions = $this->validate($conditions, $conditions_types);
-            $params = $this->validate($params, $this->types);
-            $this->resultsList = $this->DAO->get($id, $params, $conditions, $related_resource);
+            if($params_array["conditions"] !== null)
+                $params_array["conditions"] = $this->validate($params_array["conditions"], $conditions_types);
+
+            if($params_array["params"] !== null)
+                $params_array["params"] = $this->validate($params_array["params"], $this->types);
+
+            $this->resultsList = $this->DAO->get($params_array);
         } catch(InvalidInputException $e){
             $this->resultsList = $e->getExceptions();
         }
     }
-    public function search($params){
+    public function search($params_array){
 
         try{
-            $params = $this->validate($params, $this->types);
-            $this->resultsList = $this->DAO->search($params);
+            if($params_array["conditions"] !== null)
+                $params_array["conditions"] = $this->validate($params_array["conditions"], $conditions_types);
+
+            if($params_array["params"] !== null)
+                $params_array["params"] = $this->validate($params_array["params"], $this->types);
+
+            $this->resultsList = $this->DAO->search($params_array["query"],$this->template);
         } catch(InvalidInputException $e){
             $this->resultsList = $e->getExceptions();
         }

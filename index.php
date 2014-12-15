@@ -1,11 +1,7 @@
 <?php
 
 require_once("DAO/DAOfactory.php");
-
-require_once("View.php");
-require_once("Controller.php");
 require_once("MVC/MVC.php");
-
 require_once("Slim/Slim.php");
 
 Slim\Slim::registerAutoloader();
@@ -20,6 +16,13 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 							"tasks", "nationalities",
 							"courses", "questionnaires");
 
+	$actions_params = array("id"=>$id,
+							"query"=>null,
+							"params"=>null,
+							"conditions"=>null,
+							"related"=>null);
+
+
 	if(in_array($resource, $resources_array)){
 
 		// Format the type to be unpluralised so
@@ -28,10 +31,12 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 		$resource = substr(ucfirst($resource),0,-1);
 		$factory = new MVCFactory($resource);
 
-
 	} else{
 		$app->redirect('/error');
 	}
+
+
+
 
 	$model = $factory->createModel();
 	$view = $factory->createView($model, $resource);
@@ -40,20 +45,22 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 
 	$params = $app->request->params();
 
-	if(array_key_exists("datatype",$params)
-			&& in_array(strtolower($params["datatype"]), $view->getAvailableDatatypes())){
-		$datatype = strtolower($params["datatype"]);
-		unset($params["datatype"]);
-	} else{
-		$datatype="json";
+	$dataType = getDatatype($params, $view);
+
+	$actions_params["params"] = $params;
+
+	try{
+		$action = clean_request($app->request->getMethod(), $actions_params);
+
+	} catch(Exception $e){
+		//$app->redirect('/error');
 	}
 
-	$method = clean_request($app->request->getMethod());
 
-	$controller = $factory->createController($model, $method, $id, $params, $related_resource);
+	$controller = $factory->createController($model, $action, $actions_params);
 
-	header("Content-Type: application/$datatype");
-	echo $view->output("$datatype");
+	header("Content-Type: application/$dataType");
+	echo $view->output("$dataType");
 	exit;
 
 })->via('GET', 'POST', 'PUT', 'DELETE');
@@ -71,15 +78,52 @@ $app->run();
  * routing logic in the controller from REST and HTTP.
  */
 
-function clean_request($req_type, $method=null){
+function clean_request($req_type, &$actions_params){
 
-	$clean_method;
+	echo $actions_params["id"];
+	//$clean_method = "get";
+
+	if($actions_params["params"] !== null && array_key_exists("limit", $actions_params["params"])){
+		$actions_params["conditions"]["limit"] = $actions_params["params"]["limit"];
+		unset($actions_params["params"]["limit"]);
+	}
+
+	if($actions_params["params"] !== null && array_key_exists("offset", $actions_params["params"])){
+		$actions_params["conditions"]["offset"] = $actions_params["params"]["offset"];
+		unset($actions_params["params"]["offset"]);
+	}
+
+
+	//
+	// if($req_type === "GET"){
+	// 	if(array_key_exists("query", $actions_params["params"])){
+	// 		$actions_params["query"] = urldecode($actions_params["params"]["query"]);
+	// 		unset($actions_params["params"]["query"]);
+	// 		$clean_method = "search";
+	// 	} else {
+	// 		$clean_method = "get";
+	// 	}
+	// }
+
 	switch ($req_type) {
 		case 'GET':
-			$clean_method = "get";
+
+			if($actions_params["params"] !== null && array_key_exists("query", $actions_params["params"])){
+				$actions_params["query"] = urldecode($actions_params["params"]["query"]);
+				unset($actions_params["params"]["query"]);
+				$clean_method = "search";
+			} else {
+				$clean_method = "get";
+			}
+
 			break;
 		case 'POST':
+
+			if($actions_params["id"] !== null)
+				throw new Exception("Can't insert with id");
+
 			$clean_method = "insert";
+
 			break;
 		case 'PUT':
 			$clean_method = "update";
@@ -92,12 +136,26 @@ function clean_request($req_type, $method=null){
 			break;
 	}
 
-	if ($method === null) {
-		return $clean_method;
-	} else {
-		return $method;
+	return $clean_method;
+
+}
+
+function getDatatype(&$params, $view){
+
+	if(array_key_exists("datatype",$params)
+	&& in_array(strtolower($params["datatype"]),
+	$view->getAvailableDatatypes())){
+
+		$datatype = strtolower($params["datatype"]);
+		unset($params["datatype"]);
+
+	} else{
+
+		$datatype="json";
+
 	}
 
+	return $datatype;
 }
 
 ?>

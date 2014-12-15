@@ -3,25 +3,25 @@
 class Controller{
     private $model;
 
-    public function __construct($model, $action, $id, $parameters, $related_resource=null) {
+    public function __construct($model, $action, $actions_params) {
 
         $this->model = $model;
         if ($action !== NULL) {
             switch ($action) {
                 case "get":
-                    $this->model->get($id, $parameters, $related_resource);
+                    $this->model->get($actions_params);
                     break;
                 case "search":
-                    $this->model->search($parameters);
+                    $this->model->search($actions_params);
                     break;
                 case "insert":
-                    $this->model->insert($parameters);
+                    $this->model->insert($actions_params);
                     break;
                 case "update":
-                    $this->model->update($parameters);
+                    $this->model->update($actions_params);
                     break;
                 case "delete":
-                    $this->model->delete($parameters);
+                    $this->model->delete($actions_params);
                     break;
             }
         }

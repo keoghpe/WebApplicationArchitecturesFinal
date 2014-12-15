@@ -32,7 +32,7 @@ abstract class DAO
     }
 
 
-    public function get($id=null, $params=null, $conditions=null, $related=null){
+    public function get($params_array){
 
         $sqlQuery = "SELECT * ";
         $sqlQuery .= "FROM $this->table_name ";
@@ -44,19 +44,20 @@ abstract class DAO
             $sqlQuery .= "$this->join_table_name.$this->join_table_id ";
         }
 
-        if ($id !== null) {
+        if ($params_array["id"] !== null) {
+            $id=$params_array["id"];
             $sqlQuery .= " WHERE  $this->table_name.$this->table_id = '$id' ";
         }
 
         $sqlQuery .= "ORDER BY $this->table_name.$this->table_id ";
 
-        if(array_key_exists("limit", $conditions)){
-            $limit = $conditions["limit"];
+        if($params_array["conditions"] !== null && array_key_exists("limit", $params_array["conditions"])){
+            $limit = $params_array["conditions"]["limit"];
             $sqlQuery .= "LIMIT $limit ";
         }
 
-        if(array_key_exists("offset", $conditions)){
-            $limit = $conditions["offset"];
+        if($params_array["conditions"] !== null && array_key_exists("offset", $params_array["conditions"])){
+            $limit = $params_array["conditions"]["offset"];
             $sqlQuery .= "OFFSET $limit ";
         }
 
@@ -98,18 +99,18 @@ abstract class DAO
 
     }
 
-    public function search($query, $model){
+    public function search($query,$model){
         $sqlQuery = "SELECT * ";
-        $sqlQuery .= "FROM $table_name ";
+        $sqlQuery .= "FROM $this->table_name ";
         $sqlQuery .= "WHERE ";
 
         $search_string = "";
         foreach($model as $key => $value){
-            $search_string .= "$table_name.$key LIKE '%$query%' OR ";
+            $search_string .= "$this->table_name.$key LIKE '%$query%' OR ";
         }
 
         $sqlQuery .= substr($search_string, 0, -3);
-        $sqlQuery .= "ORDER BY $table_name.$table_id; ";
+        $sqlQuery .= "ORDER BY $this->table_name.$this->table_id; ";
 
         $result = $this->getDbManager()->executeSelectQuery($sqlQuery);
 
