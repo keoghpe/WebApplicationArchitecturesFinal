@@ -29,7 +29,6 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NU
 	}
 
 	$model = $factory->createModel();
-
 	$method = clean_request($app->request->getMethod());
 	$params = $app->request->params();
 	$controller = $factory->createController($model, $method, $id, $params, $related_resource);
@@ -41,12 +40,18 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)', function($resource, $id=NU
 
 })->via('GET', 'POST', 'PUT', 'DELETE');
 
+
 $app->get("/", function(){
 	header("Location: ". HOMEPAGE_LOCATION);
 	die();
 });
 
 $app->run();
+
+/**
+ * The purpose of this function is to decouple the
+ * routing logic in the controller from REST and HTTP.
+ */
 
 function clean_request($req_type, $method=null){
 

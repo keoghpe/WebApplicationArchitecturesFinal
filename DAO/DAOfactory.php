@@ -7,7 +7,7 @@ require_once("taskDAO.php");
 require_once("courseDAO.php");
 require_once("nationalityDAO.php");
 require_once("questionnaireDAO.php");
-require_once("studentDAO.php"); 
+require_once("studentDAO.php");
 
 
 class DAO_Factory {
@@ -21,28 +21,14 @@ class DAO_Factory {
 
     public function getDAO($type='')
     {
-        switch ($type) {
-            case 'Lecturer':
-                return new LecturerDAO($this->dbManager);
-                break;
-            case 'Course':
-                return new CourseDAO($this->dbManager);
-                break;
-            case 'Task':
-                return new TaskDAO($this->dbManager);
-                break;
-            case 'Student':
-                return new StudentDAO($this->dbManager);
-                break;
-            case 'Nationality':
-                return new NationalityDAO($this->dbManager);
-                break;
-            case 'Questionnaire':
-                return new QuestionnaireDAO($this->dbManager);
-                break;
-            default:
-                echo "derp";
-                break;
+
+        $DAOs = array('Lecturer','Course','Task','Student','Nationality','Questionnaire');
+
+        if(in_array($type, $DAOs)){
+            $type = $type."DAO";
+            return new $type($this->dbManager);
+        } else {
+            throw new Exception("You broke my DAO somehow");
         }
     }
 
