@@ -7,12 +7,34 @@
     window.App = {
         Models: {},
         Collections: {},
-        Views: {}
+        Views: {},
+        Router: {}
     };
 
     window.template = function (id) {
-        return _.template($('#' + id).html());
+        return Handlebars.compile($('#' + id).html());
     }
+
+
+
+    App.Router = Backbone.Router.extend({
+        routes: {
+            '': 'index',
+            'lecturers/:id':'lecturers',
+            '*other':'default'
+        },
+
+        index: function(){
+            console.log("Durkadurkastan");
+        },
+
+        lecturers: function(id){
+        },
+
+        default: function(other){
+            console.log("You tried to tune into" + other);
+        }
+    })
 
 
     App.Models.Task = Backbone.Model.extend({
@@ -24,6 +46,8 @@
             daytime: '3pm-6pm',
             courseId: 1
         },
+
+        urlRoot:'sandbox.dev:8080/WebAppArchitectures/index.php/v1/lecturers',
 
         validate: function(attrs){
             if(!$.trim(attrs.description)){
@@ -77,10 +101,11 @@
         },
 
         render: function () {
+
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
-        
+
     });
 
     App.Views.Tasks = Backbone.View.extend({
@@ -102,7 +127,8 @@
     var taskCollection = new App.Collections.Tasks([{description:'derp'},{description:'nerp'}]);
 
     var tasksView = new App.Views.Tasks({ collection : taskCollection });
+    $(".header").append(tasksView.render().el);
 
-    $(document.body).append(tasksView.render().el);
-
+    new App.Router;
+    Backbone.history.start();
 })();

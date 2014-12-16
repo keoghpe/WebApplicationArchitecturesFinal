@@ -35,6 +35,7 @@
     <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/backbone/backbone.js"></script>
+    <script src="bower_components/handlebars/handlebars.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -96,8 +97,8 @@
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
 
-    <script id="taskTemplate" type="text/template">
-    <%= description %> (<%= date %>) <%= daytime %> <button class="edit">Edit</button><button class="delete">Delete</button> 
+    <script id="taskTemplate" type="text/x-handlebars-template">
+        {{description}} {{date }} {{daytime}} <button class="edit">Edit</button><button class="delete">Delete</button>
     </script>
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
