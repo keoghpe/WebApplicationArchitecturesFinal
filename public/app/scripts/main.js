@@ -47,7 +47,7 @@
             courseId: 1
         },
 
-        urlRoot:'sandbox.dev:8080/WebAppArchitectures/index.php/v1/lecturers',
+        urlRoot:'WebAppArchitectures/index.php/v1/tasks',
 
         validate: function(attrs){
             if(!$.trim(attrs.description)){

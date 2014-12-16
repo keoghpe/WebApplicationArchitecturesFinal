@@ -8,6 +8,8 @@
 // If you want to recursively match all subfolders, use:
 // 'test/spec/**/*.js'
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 module.exports = function (grunt) {
 
   // Time how long tasks take. Can help when optimizing build times
@@ -77,13 +79,22 @@ module.exports = function (grunt) {
         // Change this to '0.0.0.0' to access the server from outside
         hostname: 'localhost'
       },
+      proxies: [
+      {
+          context: '/',
+          host: 'sandbox.dev',
+          port: 8080,
+          changeOrigin: true
+      }
+      ],
       livereload: {
         options: {
           middleware: function(connect) {
             return [
               connect.static('.tmp'),
               connect().use('/bower_components', connect.static('./bower_components')),
-              connect.static(config.app)
+              connect.static(config.app),
+              proxySnippet
             ];
           }
         }
@@ -390,6 +401,7 @@ module.exports = function (grunt) {
       'clean:server',
       'wiredep',
       'concurrent:server',
+      'configureProxies',
       'autoprefixer',
       'connect:livereload',
       'watch'
