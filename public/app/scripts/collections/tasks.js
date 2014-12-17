@@ -1,3 +1,5 @@
 App.Collections.Tasks = Backbone.Collection.extend({
-    model: App.Models.Task
+    model: App.Models.Task,
+
+    url:'WebAppArchitectures/index.php/v1/tasks'
 });

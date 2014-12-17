@@ -1,8 +1,8 @@
-App.Views.Task = Backbone.View.extend({
+App.Views.Student = Backbone.View.extend({
 
     //tagName: 'tr',
 
-    template: template('taskTemplate'),
+    //template: template('studentTemplate'),
 
     initialize: function(){
         this.model.on('change', this.render, this);
@@ -32,7 +32,7 @@ App.Views.Task = Backbone.View.extend({
 
         render: function () {
 
-            this.$el.html(this.template(this.model.toJSON()));
+            this.$el.html(template(this.model.toJSON()));
             return this;
         }
 
