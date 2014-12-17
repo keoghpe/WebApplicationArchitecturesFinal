@@ -80,9 +80,6 @@ $app->run();
 
 function clean_request($req_type, &$actions_params){
 
-	echo $actions_params["id"];
-	//$clean_method = "get";
-
 	if($actions_params["params"] !== null && array_key_exists("limit", $actions_params["params"])){
 		$actions_params["conditions"]["limit"] = $actions_params["params"]["limit"];
 		unset($actions_params["params"]["limit"]);
@@ -92,18 +89,6 @@ function clean_request($req_type, &$actions_params){
 		$actions_params["conditions"]["offset"] = $actions_params["params"]["offset"];
 		unset($actions_params["params"]["offset"]);
 	}
-
-
-	//
-	// if($req_type === "GET"){
-	// 	if(array_key_exists("query", $actions_params["params"])){
-	// 		$actions_params["query"] = urldecode($actions_params["params"]["query"]);
-	// 		unset($actions_params["params"]["query"]);
-	// 		$clean_method = "search";
-	// 	} else {
-	// 		$clean_method = "get";
-	// 	}
-	// }
 
 	switch ($req_type) {
 		case 'GET':
