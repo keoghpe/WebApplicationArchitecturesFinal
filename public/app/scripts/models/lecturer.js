@@ -1,4 +1,4 @@
-App.Models.Task = Backbone.Model.extend({
+App.Models.Lecturer = Backbone.Model.extend({
     defaults: {
         id: 0,
         name: 'Dude',

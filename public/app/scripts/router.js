@@ -3,6 +3,8 @@ App.Router = Backbone.Router.extend({
         '': 'index',
         //'*other':'default',
         'docs':'docs',
+        'docs/overview':'docsOverview',
+        'docs/:endpoint':'endpoint',
         'test/tasks':'tasks',
         'test/lecturers':'lecturers',
         'test/students':'students',
@@ -25,6 +27,31 @@ App.Router = Backbone.Router.extend({
         var docsView = new App.Views.Docs();
         $(".appContent").empty();
         $(".appContent").append(docsView.render("docs").el);
+        if($('.docsContent').is(':empty')){
+            this.docsOverview();
+        }
+    },
+
+    endpoint: function(name){
+
+        var endpoint = new App.Models.Details(window.details[name]);
+
+        if($('.appContent').is(':empty')){
+            this.docs();
+        }
+
+        var detailsView = new App.Views.Details({model:endpoint});
+        $(".docsContent").empty();
+        $(".docsContent").append(detailsView.render().el);
+    },
+
+    docsOverview: function(){
+        var docsView = new App.Views.Docs();
+        if($('.appContent').is(':empty')){
+            this.docs();
+        }
+        $(".docsContent").empty();
+        $(".docsContent").append(docsView.render("overview").el);
     },
 
     tasks: function(){

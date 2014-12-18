@@ -1,4 +1,4 @@
-App.Models.Task = Backbone.Model.extend({
+App.Models.Student = Backbone.Model.extend({
     defaults: {
         student_number: 'ffffffffffffffffffffffffffff',
         age: 18,

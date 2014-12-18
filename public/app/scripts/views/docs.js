@@ -15,6 +15,9 @@ App.Views.Docs = Backbone.View.extend({
             case "test":
                 templateId = "#testTemplate"
                 break;
+            case "overview":
+                templateId = "#overviewTemplate"
+                break;
             default:
                 templateId = "#indexTemplate"
         }

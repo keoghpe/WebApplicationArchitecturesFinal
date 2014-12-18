@@ -46,7 +46,7 @@
     <![endif]-->
 
 
-    <div class="container">
+    <div class="container-fluid">
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="active"><a href="#">Home</a></li>
@@ -54,8 +54,8 @@
           <li><a href="#test">Test</a></li>
         </ul>
         <h3 class="text-muted">public</h3>
-    </div>
-    <div class="appContent"></div>
+      </div>
+      <div class="appContent row"></div>
 
       <div class="footer">
         <p><span class="glyphicon glyphicon-tree-conifer"></span>All I want for Christmas is an A<span class="glyphicon glyphicon-tree-conifer"></span></p>
@@ -150,21 +150,67 @@
 
     <script id="docsTemplate" type="text/x-handlebars-template">
 
-        <h2>API Documentation</h2>
+        <div class="col-xs-4 col-lg-3 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="#docs/overview">Overview <span class="sr-only">(current)</span></a></li>
+                <li><a href="#docs/lecturers">Lecturers</a></li>
+                <li><a href="#docs/courses">Courses</a></li>
+                <li><a href="#docs/nationalities">Nationalities</a></li>
+                <li><a href="#docs/quesionnaires">Questionnaires</a></li>
+                <li><a href="#docs/students">Students</a></li>
+                <li><a href="#docs/tasks">Tasks</a></li>
+                <li><a href="#test">Test</a></li>
+            </ul>
+        </div>
+        <div class="col-xs-8 col-lg-9">
+            <h1>API Documentation</h1>
+
+            <div class="docsContent"></div>
+
+        </div>
+
+    </script>
+
+    <script id="detailsTemplate" type="text/x-handlebars-template">
+
+    <h3>Endpoint: {{title}}</h3>
+    <p>{{description}}</p>
+
+    </script>
+
+    <script id="overviewTemplate" type="text/x-handlebars-template">
+        <h3>Here's an overview of the API</h3>
+
+        <p>All endpoints of the API follow a standard format. The first segment of the URL contains the
+        version number of the API. This is followed by the name of the resource to be accessed. </p>
+
+        <code>
+        :VERSION/:RESOURCE/:ID/:RELATED_RESOURCE <br />
+        </code>
+
+        <p>For example:</p>
+
+        <code>
+        e.g. /v1/tasks/1
+        </code>
+
+
 
     </script>
 
     <script id="testTemplate" type="text/x-handlebars-template">
-
+    <div class="col-xs-12">
         <h2>Test the API Here</h2>
 
-        <div class="btn-group" role="group" aria-label="...">
+        <div class="btn-group" role="group">
             <a href="#test/tasks" type="button" class="btn btn-default">Tasks</a>
             <a href="#test/lecturers" type="button" class="btn btn-default">Lecturers</a>
             <a href="#test/students" type="button" class="btn btn-default">Students</a>
         </div>
 
         <div class="testContent"></div>
+
+    </div>
 
     </script>
 
@@ -184,7 +230,7 @@
 
         <div class="jumbotron">
             <h1>Welcome to my Project!</h1>
-            <p class="lead">Welcome to my amazing web API build with PHP and Slim (and my client app built with Backbone)</p>
+            <p class="lead">Welcome to my amazing web API built with PHP and Slim (and my client app built with Backbone)</p>
             <p><a class="btn btn-lg btn-success" href="#docs">Show me the docs! <span class="glyphicon glyphicon-ok"></span></a></p>
         </div>
 
@@ -195,6 +241,7 @@
         <script src="scripts/models/task.js"></script>
         <script src="scripts/models/lecturer.js"></script>
         <script src="scripts/models/student.js"></script>
+        <script src="scripts/models/details.js"></script>
         <script src="scripts/collections/tasks.js"></script>
         <script src="scripts/collections/lecturers.js"></script>
         <script src="scripts/collections/students.js"></script>
@@ -205,6 +252,7 @@
         <script src="scripts/views/student.js"></script>
         <script src="scripts/views/students.js"></script>
         <script src="scripts/views/docs.js"></script>
+        <script src="scripts/views/details.js"></script>
         <script src="scripts/router.js"></script>
         <script src="scripts/app.js"></script>
         <!-- endbuild -->

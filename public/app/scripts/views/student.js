@@ -22,18 +22,18 @@ App.Views.Student = Backbone.View.extend({
             this.model.set('description', newTaskDescription);
         },
 
-        destroy: function(){
-            this.model.destroy();
-        },
+    destroy: function(){
+        this.model.destroy();
+    },
 
-        remove: function(){
-            this.$el.remove();
-        },
+    remove: function(){
+        this.$el.remove();
+    },
 
-        render: function () {
+    render: function () {
 
-            this.$el.html(template(this.model.toJSON()));
-            return this;
-        }
+        this.$el.html(template(this.model.toJSON()));
+        return this;
+    }
 
     });
