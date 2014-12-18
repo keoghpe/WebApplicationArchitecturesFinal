@@ -156,7 +156,7 @@
                 <li><a href="#docs/lecturers">Lecturers</a></li>
                 <li><a href="#docs/courses">Courses</a></li>
                 <li><a href="#docs/nationalities">Nationalities</a></li>
-                <li><a href="#docs/quesionnaires">Questionnaires</a></li>
+                <li><a href="#docs/questionnaires">Questionnaires</a></li>
                 <li><a href="#docs/students">Students</a></li>
                 <li><a href="#docs/tasks">Tasks</a></li>
                 <li><a href="#test">Test</a></li>
@@ -176,6 +176,8 @@
     <h3>Endpoint: {{title}}</h3>
     <p>{{description}}</p>
 
+    <pre>{{output}}</pre>
+
     </script>
 
     <script id="overviewTemplate" type="text/x-handlebars-template">
@@ -193,6 +195,18 @@
         <code>
         e.g. /v1/tasks/1
         </code>
+
+        <h3>Future Additions Roadmap:</h3>
+        <p>In version 2, one to many realtionships would be nested within JSON e.g.</p>
+        <pre>
+{
+"id": 1,
+"name": "Luca Longo",
+"classes":{
+    more json
+    }
+}
+        </pre>
 
 
 

@@ -29,13 +29,16 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 		// the factory can get the correct model
 		// e.g. convert lecturers to Lecturer
 		$resource = substr(ucfirst($resource),0,-1);
+		if($resource === "Nationalitie"){
+			$resource = "Nationality";
+		}
+
+
 		$factory = new MVCFactory($resource);
 
 	} else{
 		$app->redirect('/error');
 	}
-
-
 
 
 	$model = $factory->createModel();
