@@ -55,7 +55,6 @@ abstract class DAO
 
         $sqlQuery .="; ";
 
-        //echo $sqlQuery;
         $result = $this->getDbManager()->executeSelectQuery($sqlQuery);
 
         return $result;
@@ -82,7 +81,6 @@ abstract class DAO
 
         $sqlQuery .= ";";
 
-        echo $sqlQuery;
         $result = $this->getDbManager()->executeSelectQuery($sqlQuery);
 
         return $result;
@@ -109,8 +107,6 @@ abstract class DAO
         $sqlQuery = "INSERT INTO ". $this->table_name ." " .$keys." ";
         $sqlQuery .= "VALUES " . $values .";";
 
-        echo $sqlQuery;
-
         $result = $this->getDbManager()->executeQuery($sqlQuery);
 
         if($result === null){
@@ -125,7 +121,7 @@ abstract class DAO
 
         $params = $params_array["params"];
 
-        
+
         $sqlQuery = "UPDATE $this->table_name";
         $sqlQuery .= " SET ";
 
@@ -168,14 +164,14 @@ abstract class DAO
 
     private function filter(&$sqlQuery, $params_array){
 
-        if($params_array["conditions"] !== null && array_key_exists("limit", $params_array["conditions"])){
+        if(\helper\array_and_key_exist($params_array["conditions"], "limit")){
             $limit = $params_array["conditions"]["limit"];
             $sqlQuery .= "LIMIT $limit ";
-        }
 
-        if($params_array["conditions"] !== null && array_key_exists("offset", $params_array["conditions"])){
-            $limit = $params_array["conditions"]["offset"];
-            $sqlQuery .= "OFFSET $limit ";
+            if(\helper\array_and_key_exist($params_array["conditions"], "offset")){
+                $offset = $params_array["conditions"]["offset"];
+                $sqlQuery .= "OFFSET $offset ";
+            }
         }
     }
 }

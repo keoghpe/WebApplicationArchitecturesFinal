@@ -3,6 +3,7 @@
 require_once("DAO/DAOfactory.php");
 require_once("MVC/MVC.php");
 require_once("Slim/Slim.php");
+require_once("helper.php");
 
 Slim\Slim::registerAutoloader();
 
@@ -28,12 +29,7 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 		// Format the type to be unpluralised so
 		// the factory can get the correct model
 		// e.g. convert lecturers to Lecturer
-		$resource = substr(ucfirst($resource),0,-1);
-		if($resource === "Nationalitie"){
-			$resource = "Nationality";
-		}
-
-
+		$resource = \helper\singularify($resource);
 		$factory = new MVCFactory($resource);
 
 	} else{
@@ -54,7 +50,6 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 
 	try{
 		$action = clean_request($app->request->getMethod(), $actions_params);
-
 	} catch(Exception $e){
 		$app->redirect('/error');
 	}
@@ -83,35 +78,28 @@ $app->run();
 
 function clean_request($req_type, &$actions_params){
 
-	if($actions_params["params"] !== null && array_key_exists("limit", $actions_params["params"])){
-		$actions_params["conditions"]["limit"] = $actions_params["params"]["limit"];
-		unset($actions_params["params"]["limit"]);
-	}
+	//Get references for cleaner code
+	$params =& $actions_params["params"];
+	$conditions =& $actions_params["conditions"];
+	$query =& $actions_params["query"];
 
-	if($actions_params["params"] !== null && array_key_exists("offset", $actions_params["params"])){
-		$actions_params["conditions"]["offset"] = $actions_params["params"]["offset"];
-		unset($actions_params["params"]["offset"]);
-	}
+	\helper\assign_and_unset("offset",$params,$conditions);
+	\helper\assign_and_unset("limit",$params,$conditions);
 
 	switch ($req_type) {
 		case 'GET':
-
-			if($actions_params["params"] !== null && array_key_exists("query", $actions_params["params"])){
-				$actions_params["query"] = urldecode($actions_params["params"]["query"]);
-				unset($actions_params["params"]["query"]);
+			if(\helper\array_and_key_exist($params, "query")){
+				$query = urldecode($params["query"]);
+				unset($params["query"]);
 				$clean_method = "search";
 			} else {
 				$clean_method = "get";
 			}
-
 			break;
 		case 'POST':
-
 			if($actions_params["id"] !== null)
 				throw new Exception("Can't insert with id");
-
 			$clean_method = "insert";
-
 			break;
 		case 'PUT':
 			$clean_method = "update";
@@ -131,8 +119,7 @@ function clean_request($req_type, &$actions_params){
 function getDatatype(&$params, $view){
 
 	if(array_key_exists("datatype",$params)
-	&& in_array(strtolower($params["datatype"]),
-	$view->getAvailableDatatypes())){
+	&& in_array(strtolower($params["datatype"]), $view->getAvailableDatatypes())){
 
 		$datatype = strtolower($params["datatype"]);
 		unset($params["datatype"]);
