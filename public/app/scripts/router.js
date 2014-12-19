@@ -12,24 +12,15 @@ App.Router = Backbone.Router.extend({
     },
 
     index: function(){
-        var docsView = new App.Views.Docs();
-        $(".appContent").empty();
-        $(".appContent").append(docsView.render("index").el);
+        vent.trigger('index');
     },
 
     test: function(){
-        var docsView = new App.Views.Docs();
-        $(".appContent").empty();
-        $(".appContent").append(docsView.render("test").el);
+        vent.trigger('test');
     },
 
     docs: function(){
-        var docsView = new App.Views.Docs();
-        $(".appContent").empty();
-        $(".appContent").append(docsView.render("docs").el);
-        if($('.docsContent').is(':empty')){
-            this.docsOverview();
-        }
+        vent.trigger('docs:home');
     },
 
     endpoint: function(name){
@@ -46,12 +37,7 @@ App.Router = Backbone.Router.extend({
     },
 
     docsOverview: function(){
-        var docsView = new App.Views.Docs();
-        if($('.appContent').is(':empty')){
-            this.docs();
-        }
-        $(".docsContent").empty();
-        $(".docsContent").append(docsView.render("overview").el);
+        vent.trigger('docs:overview');
     },
 
     tasks: function(){

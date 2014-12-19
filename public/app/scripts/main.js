@@ -45,5 +45,7 @@
         tasks: {title: "Tasks", description: "Some stuff", output: '{"task_id":"1",\n"description":"Luca - intro + cgi (lecture) - 45 minutes - 1st year master students - traditional lecture with some question",\n"date":"2014-01-27",\n"duration_mins":"41",\n"daytime":"11-12",\n"course_id":"1"}'}
     };
 
+    window.vent = _.extend({}, Backbone.Events);
+
 
 })();
