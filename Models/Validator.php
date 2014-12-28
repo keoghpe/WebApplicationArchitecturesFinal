@@ -13,6 +13,7 @@ class Validator
             "hex" => "/^[\da-fA-F]+$/",
             "date" => "/^\d\d\d\d-\d\d-\d\d$/",
             "timeinterval" => "/^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$/",
+            "comma_separated_string" => "/[\w_,]+/"
         );
     }
 
@@ -27,6 +28,18 @@ class Validator
         } else {
             throw new Exception("Error: there is no type: $type", 1);
         }
+    }
+
+    public function validate_fields($fields, $types){
+        $fields_array = explode(',',$fields);
+
+        foreach ($fields_array as $key => $value) {
+            if(!array_key_exists($value,$types)){
+                throw new Exception("Error: there's no field: $value", 1);
+            }
+        }
+
+        return true;
     }
 }
 

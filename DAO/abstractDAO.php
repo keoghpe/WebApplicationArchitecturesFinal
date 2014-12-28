@@ -34,8 +34,9 @@ abstract class DAO
 
     public function get($params_array){
 
-        $sqlQuery = "SELECT * ";
-        $sqlQuery .= "FROM $this->table_name ";
+        $sqlQuery = "SELECT ";
+        $sqlQuery.= isset($params_array["conditions"]["fields"]) ? $params_array["conditions"]["fields"]: "* ";
+        $sqlQuery .= " FROM $this->table_name ";
 
         // if(property_exists($this, "join_table_name")){
         //     $sqlQuery .= "INNER JOIN $this->join_table_name ";
@@ -54,6 +55,7 @@ abstract class DAO
         $this->filter($sqlQuery, $params_array);
 
         $sqlQuery .="; ";
+        //echo $sqlQuery;
 
         $result = $this->getDbManager()->executeSelectQuery($sqlQuery);
 
@@ -144,7 +146,7 @@ abstract class DAO
 
         $sqlQuery .= ";";
 
-        echo $sqlQuery;
+        //echo $sqlQuery;
 
         $result = $this->getDbManager()->executeQuery($sqlQuery);
 
@@ -174,6 +176,7 @@ abstract class DAO
             }
         }
     }
+
 }
 
 

@@ -2,12 +2,8 @@
 
 class CourseModel extends Model {
 
-    protected $template = array(
-        "description"=>"empty",
-        "lecturer_id"=>"1"
-    );
-
     protected $types = array(
+        "id_course" => "integer",
         "description"=>"alphanumeric",
         "lecturer_id"=>"integer"
     );

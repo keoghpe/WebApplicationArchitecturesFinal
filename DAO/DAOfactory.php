@@ -24,6 +24,7 @@ class DAO_Factory {
 
         $DAOs = array('Lecturer','Course','Task','Student','Nationality','Questionnaire');
 
+        
         if(in_array($type, $DAOs)){
             $type = $type."DAO";
             return new $type($this->dbManager);

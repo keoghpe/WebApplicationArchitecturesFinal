@@ -2,15 +2,8 @@
 
 class TaskModel extends Model {
 
-    protected $template = array(
-        "description"=>"empty",
-        "date"=>"2014-01-27",
-        "duration_mins"=>"60",
-        "daytime"=>"12:00-13:00",
-        "course_id"=>"1"
-    );
-
     protected $types = array(
+        "task_id"=>"integer",
         "description"=>"paragraph",
         "date"=>"date",
         "duration_mins"=>"integer",

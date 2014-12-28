@@ -38,6 +38,7 @@ function clean_request($req_type, &$actions_params){
 
     \helper\assign_and_unset("offset",$params,$conditions);
     \helper\assign_and_unset("limit",$params,$conditions);
+    \helper\assign_and_unset("fields",$params,$conditions);
 
     switch ($req_type) {
         case 'GET':

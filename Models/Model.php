@@ -11,7 +11,7 @@ abstract class Model {
     {
         $this->DAO = $aDAO;
         $this->validator = new Validator();
-        $this->conditions_types = array("limit" => "integer", "offset" => "integer");
+        $this->conditions_types = array("limit" => "integer", "offset" => "integer", "fields"=>"comma_separated_string");
     }
 
     public function get($params_array){
@@ -70,7 +70,7 @@ abstract class Model {
     public function update($params_array){
         try{
             echo var_dump($params_array);
-            
+
             $params_array["params"] = $this->validate($params_array["params"], $this->types);
             $this->resultsList = $this->DAO->update($params_array);
         } catch(InvalidInputException $e){
@@ -92,8 +92,13 @@ abstract class Model {
         foreach($params as $key => $value){
 
             try{
+
                 if(!array_key_exists($key, $typesArray)){
                     throw new Exception("Cannot access field $key associated with this table",1);
+                }
+
+                if($key === "fields"){
+                    $this->validator->validate_fields($value, $this->types);
                 }
                 $this->validator->validate($value, $typesArray[$key]);
                 $validatedInputs[$key] = $value;
@@ -112,6 +117,7 @@ abstract class Model {
         return $validatedInputs;
 
     }
+
 }
 
 ?>

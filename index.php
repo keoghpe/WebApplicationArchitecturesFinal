@@ -12,8 +12,6 @@ $app = new Slim\Slim(array('debug' => true));
 $app->map('/v1/:resource(/:id)(/:related_resource/)',
 	function($resource, $id=NULL, $related_resource=NULL) use ($app) {
 
-	//$factory;
-
 	// A list of the resources available
 	// This list is used to stop a user from
 	// requesting a resource that is unavailable
@@ -47,6 +45,11 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 	$model = $factory->createModel();
 	$view = $factory->createView($model, $resource);
 	$params = $app->request->params();
+
+	foreach ($params as $key => $value) {
+		$params[$key] = addslashes(htmlentities($value));
+	}
+
 
 	// Check if the request contains a valid datatype field
 	$dataType = \helper\getDatatype($params, $view);
