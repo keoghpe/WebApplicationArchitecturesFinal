@@ -12,12 +12,19 @@ $app = new Slim\Slim(array('debug' => true));
 $app->map('/v1/:resource(/:id)(/:related_resource/)',
 	function($resource, $id=NULL, $related_resource=NULL) use ($app) {
 
-	$factory;
+	//$factory;
+
+	// A list of the resources available
+	// This list is used to stop a user from
+	// requesting a resource that is unavailable
 	$resources_array = array("lecturers", "students",
 							"tasks", "nationalities",
 							"courses", "questionnaires");
 
-	$actions_params = array("id"=>$id,
+
+	//An array of sorted params that can be used by the appropriate
+	//parts of the application
+	$sorted_params = array("id"=>$id,
 							"query"=>null,
 							"params"=>null,
 							"conditions"=>null,
@@ -39,23 +46,21 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 
 	$model = $factory->createModel();
 	$view = $factory->createView($model, $resource);
-
-	// Check if the request contains a valid datatype field
-
 	$params = $app->request->params();
 
-	$dataType = getDatatype($params, $view);
+	// Check if the request contains a valid datatype field
+	$dataType = \helper\getDatatype($params, $view);
 
-	$actions_params["params"] = $params;
+	$sorted_params["params"] = $params;
 
 	try{
-		$action = clean_request($app->request->getMethod(), $actions_params);
+		$action = \helper\clean_request($app->request->getMethod(), $sorted_params);
 	} catch(Exception $e){
 		$app->redirect('/error');
 	}
 
 
-	$controller = $factory->createController($model, $action, $actions_params);
+	$controller = $factory->createController($model, $action, $sorted_params);
 
 	header("Content-Type: application/$dataType");
 	echo $view->output("$dataType");
@@ -63,74 +68,12 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 
 })->via('GET', 'POST', 'PUT', 'DELETE');
 
-
-$app->get("/", function(){
+//If the user isn't using the API redirect to the homepage
+$app->get("(/)", function(){
 	header("Location: ". HOMEPAGE_LOCATION);
 	die();
 });
 
 $app->run();
-
-/**
- * The purpose of this function is to decouple the
- * routing logic in the controller from REST and HTTP.
- */
-
-function clean_request($req_type, &$actions_params){
-
-	//Get references for cleaner code
-	$params =& $actions_params["params"];
-	$conditions =& $actions_params["conditions"];
-	$query =& $actions_params["query"];
-
-	\helper\assign_and_unset("offset",$params,$conditions);
-	\helper\assign_and_unset("limit",$params,$conditions);
-
-	switch ($req_type) {
-		case 'GET':
-			if(\helper\array_and_key_exist($params, "query")){
-				$query = urldecode($params["query"]);
-				unset($params["query"]);
-				$clean_method = "search";
-			} else {
-				$clean_method = "get";
-			}
-			break;
-		case 'POST':
-			if($actions_params["id"] !== null)
-				throw new Exception("Can't insert with id");
-			$clean_method = "insert";
-			break;
-		case 'PUT':
-			$clean_method = "update";
-			break;
-		case 'DELETE':
-			$clean_method = "delete";
-			break;
-		default:
-			$clean_method = "get";
-			break;
-	}
-
-	return $clean_method;
-
-}
-
-function getDatatype(&$params, $view){
-
-	if(array_key_exists("datatype",$params)
-	&& in_array(strtolower($params["datatype"]), $view->getAvailableDatatypes())){
-
-		$datatype = strtolower($params["datatype"]);
-		unset($params["datatype"]);
-
-	} else{
-
-		$datatype="json";
-
-	}
-
-	return $datatype;
-}
 
 ?>

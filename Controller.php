@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The controller in this application is responsible for
+ * executing the appropriate action in the model.
+ * The application has little business logic since
+ * it mainly deals with flows of data.
+ * A developer could modify the controller or extend it for
+ * a particular route if they chose to add more business logic.
+ */
+
 class Controller{
     private $model;
 

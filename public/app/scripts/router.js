@@ -1,7 +1,6 @@
 App.Router = Backbone.Router.extend({
     routes: {
         '': 'index',
-        //'*other':'default',
         'docs':'docs',
         'docs/overview':'docsOverview',
         'docs/:endpoint':'endpoint',

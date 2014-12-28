@@ -2,32 +2,15 @@ App.Views.Docs = Backbone.View.extend({
     //tagName: 'table',
 
     initialize: function(){
-     vent.on('docs:home', this.docs, this);
-     vent.on('docs:overview',this.docsOverview, this);
-     vent.on('index',this.index, this);
-     vent.on('test',this.test, this);
+
+         this.appContent = $(".appContent");
+         vent.on('docs:home', this.docs, this);
+         vent.on('docs:overview',this.docsOverview, this);
+         vent.on('index',this.index, this);
+         vent.on('test',this.test, this);
     },
 
     render: function (templateId) {
-
-
-
-        // switch (view) {
-        //     case "docs":
-        //         templateId = "#docsTemplate";
-        //         break;
-        //     case "index":
-        //         templateId = "#indexTemplate"
-        //         break;
-        //     case "test":
-        //         templateId = "#testTemplate"
-        //         break;
-        //     case "overview":
-        //         templateId = "#overviewTemplate"
-        //         break;
-        //     default:
-        //         templateId = "#indexTemplate"
-        // }
 
         var source = $(templateId).html();
         var template = Handlebars.compile(source);
@@ -39,28 +22,33 @@ App.Views.Docs = Backbone.View.extend({
     },
 
     index: function(){
-        $(".appContent").empty();
-        $(".appContent").append(this.render("#indexTemplate").el);
+        this.getTemplate("#indexTemplate");
+        // $(".appContent").empty();
+        // $(".appContent").append(this.render("#indexTemplate").el);
     },
 
     docs: function(){
-        $(".appContent").empty();
-        $(".appContent").append(this.render("#docsTemplate").el);
-        if($('.docsContent').is(':empty')){
-            this.docsOverview();
-        }
+        this.getTemplate("#docsTemplate");
+        // if($('.docsContent').is(':empty')){
+        //     this.docsOverview();
+        // }
     },
 
-    docsOverview: function(){
-        if($('.appContent').is(':empty')){
-            this.renderIndex();
-        }
-        $(".docsContent").empty();
-        $(".docsContent").append(this.render("overviewTemplate").el);
-    },
+    // docsOverview: function(){
+    //     if($('.appContent').is(':empty')){
+    //         this.renderIndex();
+    //     }
+    //     $(".docsContent").empty();
+    //     $(".docsContent").append(this.render("overviewTemplate").el);
+    // },
 
     test: function(){
-        $(".appContent").empty();
-        $(".appContent").append(this.render("#testTemplate").el);
+        this.getTemplate("#testTemplate");
+    },
+
+    getTemplate: function(template){
+        this.appContent.empty();
+        this.appContent.append(this.render(template).el);
     }
+
 });
