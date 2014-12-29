@@ -2,7 +2,6 @@ App.Views.Docstests = Backbone.View.extend({
 
     initialize: function(){
 
-        this.testContent = $(".testContent");
         this.appContent = $(".appContent");
         vent.on('docs:overview',this.docsOverview, this);
         vent.on('test:tasks',this.tasks, this);
@@ -10,6 +9,7 @@ App.Views.Docstests = Backbone.View.extend({
         vent.on('test:students',this.students, this);
         vent.on('test:nationalities',this.nationalities, this);
         vent.on('test:courses',this.courses, this);
+
     },
 
     render: function (templateId) {
@@ -38,9 +38,10 @@ App.Views.Docstests = Backbone.View.extend({
             this.test();
         }
 
+        var doctests = this;
         taskCollection.fetch().then(function(){
             var tasksView = new App.Views.Tasks({ collection : taskCollection });
-            this.getTemplate(tasksView);
+            doctests.getTemplate(tasksView);
         });
     },
 
@@ -50,10 +51,10 @@ App.Views.Docstests = Backbone.View.extend({
         if($('.appContent').is(':empty')){
             this.test();
         }
-
+        var doctests = this;
         lecturerCollection.fetch().then(function(){
             var lecturersView = new App.Views.Lecturers({ collection : lecturerCollection });
-            this.getTemplate(lecturersView);
+            doctests.getTemplate(lecturersView);
         });
     },
 
@@ -63,10 +64,10 @@ App.Views.Docstests = Backbone.View.extend({
         if($('.appContent').is(':empty')){
             this.test();
         }
-
+        var doctests = this;
         studentCollection.fetch().then(function(){
             var studentsView = new App.Views.Students({ collection : studentCollection });
-            this.getTemplate(studentsView);
+            doctests.getTemplate(studentsView);
         });
     },
 
@@ -76,10 +77,10 @@ App.Views.Docstests = Backbone.View.extend({
         if($('.appContent').is(':empty')){
             this.test();
         }
-
+        var doctests = this;
         nationalitiesCollection.fetch().then(function(){
             var nationalitiesView = new App.Views.Nationalities({ collection : nationalitiesCollection });
-            this.getTemplate(nationalitiesView);
+            doctests.getTemplate(nationalitiesView);
         });
     },
 
@@ -89,21 +90,22 @@ App.Views.Docstests = Backbone.View.extend({
         if($('.appContent').is(':empty')){
             this.test();
         }
-
+        var doctests = this;
         courseCollection.fetch().then(function(){
             var coursesView = new App.Views.Courses({ collection : courseCollection });
-            this.getTemplate(coursesView);
+            doctests.getTemplate(coursesView);
         });
     },
 
     test: function(){
-        this.testContent.empty();
-        this.testContent.append(this.render("#testTemplate").el);
+        $(".testContent").empty();
+        $(".testContent").append(this.render("#testTemplate").el);
     },
 
     getTemplate: function(view){
-        this.testContent.empty();
-        this.testContent.append(view.render().el);
+        console.log("derp");
+        $(".testContent").empty();
+        $(".testContent").append(view.render().el);
     }
 
 });
