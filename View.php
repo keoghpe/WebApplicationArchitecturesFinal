@@ -25,21 +25,26 @@ class View {
         $CSV = "";
         $line = "";
 
-        //If only one row returned
-        if (!is_array($anArray[0])) {
+    //If only one row returned then the first element is not an array
+        if (!is_array(array_values($anArray)[0])) {
 
             foreach ($anArray as $key => $value) {
                 $CSV .= $key . ", ";
                 $line .= $value . ", ";
             }
+
             $CSV = substr($CSV,0,-2);
             $line = substr($line,0,-2);
+
             return $CSV . "\n" . $line;
+
         } else {
-            //if multiple rows get the column names
+
+    //if multiple rows get the column names then loop through for the values
             foreach ($anArray[0] as $key => $value) {
                 $CSV .= $key . ", ";
             }
+
             $CSV = substr($CSV,0,-2);
             $CSV .= "\n";
 
@@ -66,7 +71,7 @@ class View {
     }
 
     private function array_to_xml($anArray, &$response) {
-        
+
         foreach($anArray as $key => $value) {
             if(is_array($value)) {
                 if(!is_numeric($key)){

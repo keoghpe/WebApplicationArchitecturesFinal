@@ -66,7 +66,9 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 	try{
 		$action = \helper\clean_request($app->request->getMethod(), $sorted_params);
 	} catch(Exception $e){
-		$app->redirect('/error');
+		header("Content-Type: application/json");
+		echo json_encode(array("Error:"=>$e));
+		exit;
 	}
 
 
@@ -79,7 +81,7 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 })->via('GET', 'POST', 'PUT', 'DELETE');
 
 //If the user isn't using the API redirect to the homepage
-$app->get("(/)", function(){
+$app->get("", function(){
 	header("Location: ". HOMEPAGE_LOCATION);
 	die();
 });

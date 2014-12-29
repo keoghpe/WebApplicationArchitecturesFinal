@@ -19,11 +19,12 @@ abstract class DAO
     function __construct($dbmanagerOBJ)
     {
         $this->dbManager = $dbmanagerOBJ;
+        $this->related_table_id = array();
     }
 
     public function getDBManager() {
         if ($this->dbManager == null)
-        throw new Exception ( "No persistence storage link" );
+        throw new Exception( "No persistence storage link" );
 
         return $this->dbManager;
     }
@@ -35,11 +36,16 @@ abstract class DAO
         $sqlQuery.= isset($params_array["conditions"]["fields"]) ? $params_array["conditions"]["fields"]: "* ";
         $sqlQuery .= " FROM $this->table_name ";
 
-        if($params_array["related"] !== null){
+        if($params_array["related"] !== null && $params_array["id"] !== null){
 
-            $id=$params_array["id"];
-            $rel_id = $this->related_table_id[$params_array["related"]];
-            $sqlQuery .= " WHERE  $rel_id = '$id' ";
+            if(array_key_exists($params_array["related"], $this->related_table_id)){
+                $id=$params_array["id"];
+                $rel_id = $this->related_table_id[$params_array["related"]];
+                $sqlQuery .= " WHERE  $rel_id = '$id' ";
+            } else{
+                $related = $params_array["related"];
+                return array("related_entity_error"=>"There are no $related associated with the entity $this->table_name");
+            }
 
         } else if ($params_array["id"] !== null) {
             $id=$params_array["id"];
