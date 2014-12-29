@@ -40,7 +40,7 @@ class View {
 
         } else {
 
-    //if multiple rows get the column names then loop through for the values
+    //If multiple rows get the column names then loop through for the values
             foreach ($anArray[0] as $key => $value) {
                 $CSV .= $key . ", ";
             }
