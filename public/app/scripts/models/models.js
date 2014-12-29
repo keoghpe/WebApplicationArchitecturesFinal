@@ -65,3 +65,30 @@ App.Models.Task = Backbone.Model.extend({
         console.log('Doing ' + this.get('description'));
     }
 });
+
+App.Models.Nationality = Backbone.Model.extend({
+    defaults: {
+        id:0,
+        description:"anonymous"
+    },
+
+    urlRoot:'WebAppArchitectures/index.php/v1/nationalities',
+
+    validate: function(attrs){
+
+    }
+});
+
+App.Models.Course = Backbone.Model.extend({
+    defaults: {
+        id_course:1,
+        description:"Web Application Architectures",
+        lecturer_id:1
+    },
+
+    urlRoot:'WebAppArchitectures/index.php/v1/courses',
+
+    validate: function(attrs){
+
+    }
+});

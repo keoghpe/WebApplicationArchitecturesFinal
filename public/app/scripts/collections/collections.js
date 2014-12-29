@@ -15,3 +15,15 @@ App.Collections.Tasks = Backbone.Collection.extend({
 
     url:'WebAppArchitectures/index.php/v1/tasks'
 });
+
+App.Collections.Courses = Backbone.Collection.extend({
+    model: App.Models.Course,
+
+    url:'WebAppArchitectures/index.php/v1/courses'
+});
+
+App.Collections.Nationalities = Backbone.Collection.extend({
+    model: App.Models.Nationality,
+
+    url:'WebAppArchitectures/index.php/v1/nationalities'
+});

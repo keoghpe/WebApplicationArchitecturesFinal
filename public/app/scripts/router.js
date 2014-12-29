@@ -7,6 +7,8 @@ App.Router = Backbone.Router.extend({
         'test/tasks':'tasks',
         'test/lecturers':'lecturers',
         'test/students':'students',
+        'test/nationalities':'nationalities',
+        'test/courses':'courses',
         'test':'test'
     },
 
@@ -78,6 +80,34 @@ App.Router = Backbone.Router.extend({
             var studentsView = new App.Views.Students({ collection : studentCollection });
             $(".testContent").empty();
             $(".testContent").append(studentsView.render().el);
+        });
+    },
+
+    nationalities: function(){
+        var nationalitiesCollection = new App.Collections.Nationalities;
+
+        if($('.appContent').is(':empty')){
+            this.test();
+        }
+
+        nationalitiesCollection.fetch().then(function(){
+            var nationalitiesView = new App.Views.Nationalities({ collection : nationalitiesCollection });
+            $(".testContent").empty();
+            $(".testContent").append(nationalitiesView.render().el);
+        });
+    },
+
+    courses: function(){
+        var courseCollection = new App.Collections.Courses;
+
+        if($('.appContent').is(':empty')){
+            this.test();
+        }
+
+        courseCollection.fetch().then(function(){
+            var coursesView = new App.Views.Courses({ collection : courseCollection });
+            $(".testContent").empty();
+            $(".testContent").append(coursesView.render().el);
         });
     },
 

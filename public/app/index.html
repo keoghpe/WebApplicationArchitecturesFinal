@@ -74,9 +74,6 @@
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
 
-
-
-
     <script id="tasksTemplate" type="text/x-handlebars-template">
 
         <table class="table">
@@ -146,6 +143,54 @@
         </table>
 
     </script>
+
+
+    <script id="nationalitiesTemplate" type="text/x-handlebars-template">
+
+    <table class="table">
+
+    <tr>
+    <th>ID</th>
+    <th>Description</th>
+    </tr>
+
+    {{#each []}}
+    <tr>
+    <td>{{this.id}}</td>
+    <td>{{this.description}}</td>
+    <td><button class="edit">Edit</button></td>
+    <td><button class="delete">Delete</button></td>
+    </tr>
+    {{/each}}
+
+    </table>
+
+    </script>
+
+    <script id="coursesTemplate" type="text/x-handlebars-template">
+
+    <table class="table">
+
+    <tr>
+    <th>Course Id</th>
+    <th>Description</th>
+    <th>Lecturer Id</th>
+    </tr>
+
+    {{#each []}}
+    <tr>
+    <td>{{this.id_course}}</td>
+    <td>{{this.description}}</td>
+    <td>{{this.lecturer_id}}</td>
+    <td><button class="edit">Edit</button></td>
+    <td><button class="delete">Delete</button></td>
+    </tr>
+    {{/each}}
+
+    </table>
+
+    </script>
+
 
 
     <script id="docsTemplate" type="text/x-handlebars-template">
@@ -223,6 +268,8 @@
             <a href="#test/tasks" type="button" class="btn btn-default">Tasks</a>
             <a href="#test/lecturers" type="button" class="btn btn-default">Lecturers</a>
             <a href="#test/students" type="button" class="btn btn-default">Students</a>
+            <a href="#test/nationalities" type="button" class="btn btn-default">Nationalities</a>
+            <a href="#test/courses" type="button" class="btn btn-default">Courses</a>
         </div>
 
         <div class="testContent"></div>
@@ -265,6 +312,8 @@
         <script src="scripts/views/students.js"></script>
         <script src="scripts/views/docs.js"></script>
         <script src="scripts/views/details.js"></script>
+        <script src="scripts/views/nationalities.js"></script>
+        <script src="scripts/views/courses.js"></script>
         <script src="scripts/router.js"></script>
         <script src="scripts/app.js"></script>
         <!-- endbuild -->
