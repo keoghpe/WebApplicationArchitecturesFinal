@@ -232,6 +232,7 @@
     </script>
 
     <script id="overviewTemplate" type="text/x-handlebars-template">
+    <div class="col-lg-9">
         <h3>Here's an overview of the API</h3>
 
         <p>All endpoints of the API follow a standard format. The first segment of the URL contains the
@@ -247,23 +248,38 @@
         e.g. /v1/tasks/1
         </code>
 
-        <h3></h3>
-        <p>http://en.wikipedia.org/wiki/User_error</p>
+        <h2>CRUD Operations</h2>
+        <h3>Create</h3>
+        <p>A new entity can be created for a resource by sending a valid POST request to the base URL for that resource.
+        The POST request cannot specify an ID for the resource or it will result in an error.</p>
 
-        <h3>Future Additions Roadmap:</h3>
-        <p>In version 2, one to many realtionships would be nested within JSON e.g.</p>
-        <pre>
-{
-"id": 1,
-"name": "Luca Longo",
-"classes":{
-    more json
-    }
-}
-        </pre>
+        <h3>Read</h3>
+        <p>All Routes to read entities follow a simple form to make it easy for developers to access them. There are several parameters that can be passed to a get request in order to filter the results of the request.</p>
 
+        <h4>Paging</h4>
+        <p>The parameters 'limit' and 'offset' can be passed to the GET request in order to reduce the size of the response. For example, </p>
+        <code>/v1/tasks?limit=3&amp;offset=5</code>
+        <p>will return 3 results starting at the fifth element in the tasks table.</p>
 
+        <h4>Search</h4>
+        <p>The parameter 'query' takes a url encoded string to search for in the database. </p>
+        <code>/v1/tasks?query=jogging</code>
+        <p>will return all the results associated with jogging in the tasks table.</p>
 
+        <h4>Filtering</h4>
+        <p>The parameter 'fields' takes a comma delimited list to filter results on in the database. </p>
+        <code>/v1/tasks?fields=description</code>
+        <p>will return just the descriptions of the entities in the tasks table. If there is no field an error will be thrown of the form "Error: there's no field: xxx"</p>
+
+        <h4>File Types</h4>
+        <p>The parameter 'datatype' can currently take three options: csv, json or xml</p>
+        <code>/v1/tasks?query=json</code>
+        <p>will return all the results associated with the tasks table in JSON format.</p>
+
+        <h3>Update</h3>
+
+        <h3>Delete</h3>
+    </div>
     </script>
 
     <script id="testTemplate" type="text/x-handlebars-template">

@@ -27,7 +27,7 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 							"params"=>null,
 							"conditions"=>null,
 							"related"=>null);
-	
+
 	// If the user specifies a related resource create the factory
 	// for that resource instead
 	if($related_resource !==NULL){
@@ -51,6 +51,8 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 	$model = $factory->createModel();
 	$view = $factory->createView($model, $resource);
 	$params = $app->request->params();
+
+	//If the api is used using JSON, XML etc get the params
 	$bod = $app->request()->getBody();
 	if(is_array($bod))
 		$params = array_merge($params, $bod);
