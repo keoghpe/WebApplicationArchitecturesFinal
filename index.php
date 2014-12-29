@@ -8,6 +8,7 @@ require_once("helper.php");
 Slim\Slim::registerAutoloader();
 
 $app = new Slim\Slim(array('debug' => true));
+$app->add(new \Slim\Middleware\ContentTypes());
 
 $app->map('/v1/:resource(/:id)(/:related_resource)',
 	function($resource, $id=NULL, $related_resource=NULL) use ($app) {
@@ -19,7 +20,6 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 							"tasks", "nationalities",
 							"courses", "questionnaires");
 
-
 	//An array of sorted params that can be used by the appropriate
 	//parts of the application
 	$sorted_params = array("id"=>$id,
@@ -27,14 +27,13 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 							"params"=>null,
 							"conditions"=>null,
 							"related"=>null);
-
+	
 	// If the user specifies a related resource create the factory
 	// for that resource instead
 	if($related_resource !==NULL){
 		$sorted_params["related"] = $resource;
 		$resource = $related_resource;
 	}
-
 
 	if(in_array($resource, $resources_array)){
 
@@ -52,6 +51,9 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 	$model = $factory->createModel();
 	$view = $factory->createView($model, $resource);
 	$params = $app->request->params();
+	$bod = $app->request()->getBody();
+	if(is_array($bod))
+		$params = array_merge($params, $bod);
 
 	foreach ($params as $key => $value) {
 		$params[$key] = addslashes(htmlentities($value));

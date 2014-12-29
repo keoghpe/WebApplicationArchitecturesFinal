@@ -81,6 +81,7 @@ App.Views.Docstests = Backbone.View.extend({
         nationalitiesCollection.fetch().then(function(){
             var nationalitiesView = new App.Views.Nationalities({ collection : nationalitiesCollection });
             doctests.getTemplate(nationalitiesView);
+            new App.Views.AddNationality({ collection : nationalitiesCollection });
         });
     },
 

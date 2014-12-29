@@ -9,3 +9,20 @@ App.Views.Nationalities = Backbone.View.extend({
         return this;
     }
 });
+
+App.Views.AddNationality = Backbone.View.extend({
+    el: "#addNationality",
+
+    events:{
+        'submit': 'addNationality'
+    },
+
+    addNationality: function(e){
+        e.preventDefault();
+
+        this.collection.create({
+            'description': this.$('#nationality').val()
+        });
+        console.log(this.collection);
+    }
+});

@@ -68,7 +68,7 @@ App.Models.Task = Backbone.Model.extend({
 
 App.Models.Nationality = Backbone.Model.extend({
     defaults: {
-        id:0,
+        //id:0,
         description:"anonymous"
     },
 
