@@ -81,7 +81,7 @@ $app->map('/v1/:resource(/:id)(/:related_resource)',
 })->via('GET', 'POST', 'PUT', 'DELETE');
 
 //If the user isn't using the API redirect to the homepage
-$app->get("", function(){
+$app->get("(/)", function(){
 	header("Location: ". HOMEPAGE_LOCATION);
 	die();
 });

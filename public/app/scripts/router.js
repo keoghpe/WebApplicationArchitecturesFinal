@@ -42,73 +42,23 @@ App.Router = Backbone.Router.extend({
     },
 
     tasks: function(){
-        var taskCollection = new App.Collections.Tasks;
-
-        if($('.appContent').is(':empty')){
-            this.test();
-        }
-
-        taskCollection.fetch().then(function(){
-            var tasksView = new App.Views.Tasks({ collection : taskCollection });
-            $(".testContent").empty();
-            $(".testContent").append(tasksView.render().el);
-        });
+        vent.trigger('test:tasks');
     },
 
     lecturers: function(){
-        var lecturerCollection = new App.Collections.Lecturers;
-
-        if($('.appContent').is(':empty')){
-            this.test();
-        }
-
-        lecturerCollection.fetch().then(function(){
-            var lecturersView = new App.Views.Lecturers({ collection : lecturerCollection });
-            $(".testContent").empty();
-            $(".testContent").append(lecturersView.render().el);
-        });
+        vent.trigger('test:lecturers');
     },
 
     students: function(){
-        var studentCollection = new App.Collections.Students;
-
-        if($('.appContent').is(':empty')){
-            this.test();
-        }
-
-        studentCollection.fetch().then(function(){
-            var studentsView = new App.Views.Students({ collection : studentCollection });
-            $(".testContent").empty();
-            $(".testContent").append(studentsView.render().el);
-        });
+        vent.trigger('test:students');
     },
 
     nationalities: function(){
-        var nationalitiesCollection = new App.Collections.Nationalities;
-
-        if($('.appContent').is(':empty')){
-            this.test();
-        }
-
-        nationalitiesCollection.fetch().then(function(){
-            var nationalitiesView = new App.Views.Nationalities({ collection : nationalitiesCollection });
-            $(".testContent").empty();
-            $(".testContent").append(nationalitiesView.render().el);
-        });
+        vent.trigger('test:nationalities');
     },
 
     courses: function(){
-        var courseCollection = new App.Collections.Courses;
-
-        if($('.appContent').is(':empty')){
-            this.test();
-        }
-
-        courseCollection.fetch().then(function(){
-            var coursesView = new App.Views.Courses({ collection : courseCollection });
-            $(".testContent").empty();
-            $(".testContent").append(coursesView.render().el);
-        });
+        vent.trigger('test:courses');
     },
 
     default: function(other){
