@@ -9,7 +9,7 @@ Slim\Slim::registerAutoloader();
 
 $app = new Slim\Slim(array('debug' => true));
 
-$app->map('/v1/:resource(/:id)(/:related_resource/)',
+$app->map('/v1/:resource(/:id)(/:related_resource)',
 	function($resource, $id=NULL, $related_resource=NULL) use ($app) {
 
 	// A list of the resources available
@@ -27,6 +27,13 @@ $app->map('/v1/:resource(/:id)(/:related_resource/)',
 							"params"=>null,
 							"conditions"=>null,
 							"related"=>null);
+
+	// If the user specifies a related resource create the factory
+	// for that resource instead
+	if($related_resource !==NULL){
+		$sorted_params["related"] = $resource;
+		$resource = $related_resource;
+	}
 
 
 	if(in_array($resource, $resources_array)){

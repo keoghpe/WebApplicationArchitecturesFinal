@@ -9,9 +9,6 @@
  *
  * protected $table_name = "questionnaire"; // the table name
  * protected $table_id = "id"; // the table primary key
- * protected $join_table_name = "students"; // a table to join with (optional)
- * protected $foreign_key = "student_number"; // a foreign key to join on (must be set if $join_table_name is set)
- * protected $join_table_id = "student_number"; // the column name of the foreign key in the joining table (must be set if $join_table_name is set)
  *
  * A subclass can override these methods to produce different behaviour
  */
@@ -38,14 +35,13 @@ abstract class DAO
         $sqlQuery.= isset($params_array["conditions"]["fields"]) ? $params_array["conditions"]["fields"]: "* ";
         $sqlQuery .= " FROM $this->table_name ";
 
-        // if(property_exists($this, "join_table_name")){
-        //     $sqlQuery .= "INNER JOIN $this->join_table_name ";
-        //     $sqlQuery .= "ON $this->table_name.$this->foreign_key";
-        //     $sqlQuery .= "=";
-        //     $sqlQuery .= "$this->join_table_name.$this->join_table_id ";
-        // }
+        if($params_array["related"] !== null){
 
-        if ($params_array["id"] !== null) {
+            $id=$params_array["id"];
+            $rel_id = $this->related_table_id[$params_array["related"]];
+            $sqlQuery .= " WHERE  $rel_id = '$id' ";
+
+        } else if ($params_array["id"] !== null) {
             $id=$params_array["id"];
             $sqlQuery .= " WHERE  $this->table_name.$this->table_id = '$id' ";
         }
