@@ -39,7 +39,7 @@ abstract class Model {
             if($params_array["params"] !== null)
                 $params_array["params"] = $this->validate($params_array["params"], $this->types);
 
-            $this->resultsList = $this->DAO->search($params_array, $this->template);
+            $this->resultsList = $this->DAO->search($params_array, $this->types);
         } catch(InvalidInputException $e){
             $this->resultsList = $e->getExceptions();
         }
@@ -69,7 +69,7 @@ abstract class Model {
 
     public function update($params_array){
         try{
-            echo var_dump($params_array);
+            //echo var_dump($params_array);
 
             $params_array["params"] = $this->validate($params_array["params"], $this->types);
             $this->resultsList = $this->DAO->update($params_array);

@@ -2,3 +2,4 @@ Slim/
 simpletest/
 conf/
 .htaccess
+config.inc.php

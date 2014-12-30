@@ -1,18 +1,22 @@
 <?php namespace helper;
+class Exception extends \Exception {}
 
+//takes the plural form of a noun and returns the singular. Not complete.
 function singularify($resource){
     $resource = substr(ucfirst($resource),0,-1);
-    if($resource === "Nationalitie"){
-        $resource = "Nationality";
+    if(substr($resource,-2) === "ie"){
+        $resource = substr($resource,0,-2) . "y";
     }
-
     return $resource;
 }
-
+//Tests that both an array and a key in that array exists.
 function array_and_key_exist($array, $key){
+    if(!is_array($array)){
+        return false;
+    }
     return $array !== null && array_key_exists($key, $array);
 }
-
+//Takes two references to arrays and removes the value from one and passes it to the other
 function assign_and_unset($key, &$from, &$to){
     if(\helper\array_and_key_exist($from, $key)){
         $to[$key] = $from[$key];
@@ -42,7 +46,7 @@ function clean_request($req_type, &$actions_params){
 
     switch ($req_type) {
         case 'GET':
-        if(\helper\array_and_key_exist($params, "query")){
+        if($params["query"] !== null){
             $query = urldecode($params["query"]);
             unset($params["query"]);
             $clean_method = "search";
@@ -62,7 +66,7 @@ function clean_request($req_type, &$actions_params){
         $clean_method = "delete";
         break;
         default:
-        $clean_method = "get";
+        throw new Exception("Cannot handle ".$req_type." requests.");
         break;
     }
 

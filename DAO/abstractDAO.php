@@ -67,11 +67,13 @@ abstract class DAO
 
     public function search($params_array,$model){
         $query = $params_array["query"];
-        $sqlQuery.= isset($params_array["conditions"]["fields"]) ? $params_array["conditions"]["fields"]: "* ";
+        $sqlQuery = "SELECT ";
+        $sqlQuery.= isset($params_array["conditions"]["fields"]) ? $params_array["conditions"]["fields"] : "* ";
         $sqlQuery .= "FROM $this->table_name ";
         $sqlQuery .= "WHERE ";
 
         $search_string = "";
+        
         foreach($model as $key => $value){
             $search_string .= "$this->table_name.$key LIKE '%$query%' OR ";
         }

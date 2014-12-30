@@ -3,6 +3,8 @@
 class View {
 
     private $model, $resource;
+
+    //Takes the Model and the name of the resource to render
     function __construct($model, $resource){
         $this->resource = $resource;
         $this->model = $model;
@@ -11,6 +13,7 @@ class View {
     public function getAvailableDatatypes(){
         return array("xml","json","csv");
     }
+
     public function output($type=null){
         if ($type==="csv") {
             return $this->toCSV($this->model->output());

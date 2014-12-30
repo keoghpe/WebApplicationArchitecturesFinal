@@ -14,7 +14,8 @@ class Validator
             "date" => "/^\d\d\d\d-\d\d-\d\d$/",
             "timeinterval" => "/^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$/",
             "comma_separated_string" => "/^[\w_,]+$/",
-            "alphanumeric" => "/^[\w\d ]+$/"
+            "alphanumeric" => "/^[\w\d ]+$/",
+            "paragraph" => "/.*/"
         );
     }
 

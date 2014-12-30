@@ -246,7 +246,7 @@
         <h3>Here's an overview of the API</h3>
 
         <p>All endpoints of the API follow a standard format. The first segment of the URL contains the
-        version number of the API. This is followed by the name of the resource to be accessed. </p>
+        version number of the API. This is followed by the name of the resource to be accessed. If a single specific resource is to be accessed then an id can be specified next. After that a related resource to access can be specified.</p>
 
         <code>
         :VERSION/:RESOURCE/:ID/:RELATED_RESOURCE <br />
@@ -261,7 +261,7 @@
         <h2>CRUD Operations</h2>
         <h3>Create</h3>
         <p>A new entity can be created for a resource by sending a valid POST request to the base URL for that resource.
-        The POST request cannot specify an ID for the resource or it will result in an error.</p>
+        The POST request cannot specify an ID for the resource or it will result in an error. Post requests can send parameters as xml, csv or json or they can be sent as a typical post request from a form.</p>
 
         <h3>Read</h3>
         <p>All Routes to read entities follow a simple form to make it easy for developers to access them. There are several parameters that can be passed to a get request in order to filter the results of the request.</p>

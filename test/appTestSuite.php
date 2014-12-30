@@ -6,5 +6,6 @@ class AppTestSuite extends TestSuite{
         parent::__construct();
         $this->addFile('validatorTests.php');
         $this->addFile('helperTests.php');
+        $this->addFile('viewTests.php');
     }
 }
