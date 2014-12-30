@@ -11,7 +11,7 @@ App.Models.Lecturer = Backbone.Model.extend({
         name: 'Dude',
     },
 
-    urlRoot:'WebAppArchitectures/index.php/v1/lecturers',
+    urlRoot: App.baseurl + '/index.php/v1/lecturers',
 
     validate: function(attrs){
         if(!$.trim(attrs.name)){
@@ -28,7 +28,7 @@ App.Models.Student = Backbone.Model.extend({
         id_nationality: 0
     },
 
-    urlRoot:'WebAppArchitectures/index.php/v1/students',
+    urlRoot: App.baseurl + '/index.php/v1/students',
 
     validate: function(attrs){
 
@@ -49,7 +49,7 @@ App.Models.Task = Backbone.Model.extend({
         course_id: 1
     },
 
-    urlRoot:'WebAppArchitectures/index.php/v1/tasks',
+    urlRoot: App.baseurl + '/index.php/v1/tasks',
 
     validate: function(attrs){
         if(!$.trim(attrs.description)){
@@ -72,7 +72,7 @@ App.Models.Nationality = Backbone.Model.extend({
         description:"anonymous"
     },
 
-    urlRoot:'WebAppArchitectures/index.php/v1/nationalities',
+    urlRoot: App.baseurl + '/index.php/v1/nationalities',
 
     validate: function(attrs){
 
@@ -86,7 +86,7 @@ App.Models.Course = Backbone.Model.extend({
         lecturer_id:1
     },
 
-    urlRoot:'WebAppArchitectures/index.php/v1/courses',
+    urlRoot: App.baseurl + '/index.php/v1/courses',
 
     validate: function(attrs){
 

@@ -11,6 +11,8 @@
         Router: {}
     };
 
+    window.App.baseurl = "../../";//"WebAppArchitectures/";
+
     window.template = function (id) {
         return Handlebars.compile($('#' + id).html());
     }
