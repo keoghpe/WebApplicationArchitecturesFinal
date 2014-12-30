@@ -51,7 +51,7 @@
         <ul class="nav nav-pills pull-right">
           <li class="active"><a href="#">Home</a></li>
           <li><a href="#docs">Docs</a></li>
-          <li><a href="#test">Test</a></li>
+          <li><a href="#test">App</a></li>
         </ul>
         <h3 class="text-muted">public</h3>
       </div>
@@ -210,7 +210,6 @@
                 <li><a href="#docs/questionnaires">Questionnaires</a></li>
                 <li><a href="#docs/students">Students</a></li>
                 <li><a href="#docs/tasks">Tasks</a></li>
-                <li><a href="#test">Test</a></li>
             </ul>
         </div>
         <div class="col-xs-8 col-lg-9">
@@ -225,9 +224,20 @@
     <script id="detailsTemplate" type="text/x-handlebars-template">
 
     <h3>Endpoint: {{title}}</h3>
-    <p>{{description}}</p>
+    <p>The entities can be accessed at the following url:</p>
+    <code>{{url}}</code>
+    <p>The API returns entities of the form:</p>
 
     <pre>{{output}}</pre>
+
+    {{#if related}}
+    <p>The API has entities associated accessed using the following:<p>
+    {{#each related}}
+    <code>{{this}}</code>
+    {{/each}}
+    {{else}}
+    <p>This entity has no related entities.</p>
+    {{/if}}
 
     </script>
 
@@ -277,8 +287,20 @@
         <p>will return all the results associated with the tasks table in JSON format.</p>
 
         <h3>Update</h3>
+        <p>Entities can be updated by sending a PUT request to an API with an ID specified.</p>
+        <code>/v1/tasks/2</code>
+        <p>To update all entities in the table simply specify the base url without an id.</p>
+        <p>Updates are made by passing parameters in the request. If the user specifies a non-existent parameter it will result in an error.</p>
+        <pre>["Cannot access field field1 associated with this table","Cannot access field field2 associated with this table"]</pre>
 
         <h3>Delete</h3>
+        <p>Similarly to the Update action, entities can be deleted by sending a delete request to an API with an ID specified.</p>
+        <code>/v1/tasks/2</code>
+        <p>To delete all entities in the table simply specify the base url without an id.</p>
+        <code>/v1/tasks</code>
+
+        <h2>Route Specifics</h2>
+        <p>The specifications for each route can be accessed from the menu on the left.</p>
     </div>
     </script>
 

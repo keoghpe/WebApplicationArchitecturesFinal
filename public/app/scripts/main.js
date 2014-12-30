@@ -37,12 +37,38 @@
         lecturers: {
             title: "Lecturers",
             description: "Some stuff",
-            output: '{\n"id":"1",\n"name":"Luca Longo"\n}'},
-        courses: {title: "Courses", description: "Some stuff", output: '{"id_course":"1",\n"description":"Web Application Architectures",\n"lecturer_id":"1"}'},
-        nationalities: {title: "Nationalities", description: "Some stuff", output: '{\n"id":"1",\n"description":"Australia"\n}'},
-        questionnaires: {title: "Questionnaires", description: "Some stuff", output: longstring},
-        students: {title: "Students", description: "Some stuff", output: '{"student_number":"00ad36b687fdcd2c99c49038826b07bc76c441ff",\n"age":"30",\n"id_nationality":"8"}'},
-        tasks: {title: "Tasks", description: "Some stuff", output: '{"task_id":"1",\n"description":"Luca - intro + cgi (lecture) - 45 minutes - 1st year master students - traditional lecture with some question",\n"date":"2014-01-27",\n"duration_mins":"41",\n"daytime":"11-12",\n"course_id":"1"}'}
+            url: "/v1/lecturers",
+            output: '{\n"id":"1",\n"name":"Luca Longo"\n}',
+            related: ["/v1/lecturers/1/courses"]},
+        courses: {
+            title: "Courses",
+            description: "Some stuff",
+            url: "/v1/courses",
+            output: '{"id_course":"1",\n"description":"Web Application Architectures",\n"lecturer_id":"1"}',
+            related: ["/v1/courses/1/tasks"]
+            },
+        nationalities: {
+            title: "Nationalities",
+            description: "Some stuff",
+            url: "/v1/nationalities",
+            output: '{\n"id":"1",\n"description":"Australia"\n}',
+            related: ["/v1/nationalies/1/students"]
+            },
+        questionnaires: {
+            title: "Questionnaires",
+            description: "Some stuff",
+            url: "/v1/questionnaires",
+            output: longstring},
+        students: {
+            title: "Students",
+            description: "Some stuff",
+            url: "/v1/students",
+            output: '{"student_number":"00ad36b687fdcd2c99c49038826b07bc76c441ff",\n"age":"30",\n"id_nationality":"8"}'},
+        tasks: {
+            title: "Tasks",
+            description: "Some stuff",
+            url: "/v1/tasks",
+            output: '{"task_id":"1",\n"description":"Luca - intro + cgi (lecture) - 45 minutes - 1st year master students - traditional lecture with some question",\n"date":"2014-01-27",\n"duration_mins":"41",\n"daytime":"11-12",\n"course_id":"1"}'}
     };
 
     window.vent = _.extend({}, Backbone.Events);

@@ -22,7 +22,9 @@ App.Views.AddNationality = Backbone.View.extend({
 
         this.collection.create({
             'description': this.$('#nationality').val()
-        });
-        console.log(this.collection);
+        },
+        {success: function(){
+            vent.trigger('test:nationalities');
+        }});
     }
 });
